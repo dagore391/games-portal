@@ -1,0 +1,31 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTCOMPANY, array(1)); ?>"><?php echo LANG_COMPANIES; ?></a> &#187; <b><?php echo CONTEXT['COMPANY']->company_name; ?> (<?php echo LANG_EDIT; ?>)</b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo CONTEXT['COMPANY']->company_name; ?> (<?php echo LANG_EDIT; ?>)</div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_EDITCOMPANY, array(CONTEXT['COMPANY']->company_id)); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="editcompany-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="name"><b><?php echo LANG_NAME; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="name" name="name" maxlength="128" placeholder="<?php echo LANG_NAME; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['NAME']; ?>" required>
+					</div>
+					<input class="button button-red" name="game-submit" type="submit" value="<?php echo LANG_SAVE_CHANGES; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

@@ -1,0 +1,66 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+?>
+<aside class="border-left-gray3 gradient-gray rcolumn">
+	<!-- Recent Articles -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_TOP_FORUM_USERS; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				if(sizeof(CONTEXT['TOP_MEMBERS']) > 0) {
+					$position = 1;
+					foreach(CONTEXT['TOP_MEMBERS'] as $row) {
+						echo '<div class="flex flex-valign-center flex-halign-justify">
+							<div class="flex flex-valign-center padding5">
+								<span class="font-white margin-right10">' . ($position++) . '.</span>
+								<img alt="' . $row->member_username . '" class="border1-gray3 margin-right10 right-avatar" src="' . $row->member_avatar . '" title="' . $row->member_username . '">
+								<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($row->member_id)) . '">' . $row->member_username . '</a>
+							</div>
+							<span class="font-white padding5">' . $row->member_totalmessages . '</span>
+						</div>';
+					} 
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<!-- Recent Releases -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_LATEST_TOPICS; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				if(sizeof(CONTEXT['LATEST_TOPICS']) > 0) {
+					foreach(CONTEXT['LATEST_TOPICS'] as $row) {
+						echo '<div class="font-white padding5">
+							<span>&#10070;</span>&nbsp;<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($row->topic_forum, $row->topic_id, 1)) . '">' . $row->topic_title . '</a>
+						</div>';
+					} 
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<!-- Recent Cheats -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_LATEST_POSTS; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				if(sizeof(CONTEXT['LATEST_POSTS']) > 0) {
+					foreach(CONTEXT['LATEST_POSTS'] as $row) {
+						echo '<div class="font-white padding5">
+							<span>&#10070;</span>&nbsp;<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($row->post_forum, $row->post_topic, 1)) . '">' . $row->post_title . '</a>
+						</div>';
+					} 
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+</aside>

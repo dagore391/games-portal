@@ -1,0 +1,20 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+?>
+<aside class="left">
+	<ul class="left-links">
+		<li class="block-header"><?php echo LANG_MANAGEMENT; ?></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a></li>
+		<?php if(CONTEXT['SECURITY']['AUTH']::isAdmin() || CONTEXT['SECURITY']['AUTH']::isManager()) { ?>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMEMBER, array(1)); ?>"><?php echo LANG_USERS; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTENTRY, array(1)); ?>"><?php echo LANG_ENTRIES; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTGAME, array(1)); ?>"><?php echo LANG_GAMES; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTPLATFORM, array(1)); ?>"><?php echo LANG_PLATFORMS; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTCHEAT, array(1)); ?>"><?php echo LANG_CHEATS; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTCOMPANY, array(1)); ?>"><?php echo LANG_COMPANIES; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMETADATA, array(1)); ?>"><?php echo LANG_METADATAS; ?></a></li>
+		<li>&#187;&nbsp;<a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMETAGROUP, array(1)); ?>"><?php echo LANG_METAGROUPS; ?></a></li>
+		<?php } ?>
+	</ul>
+</aside>

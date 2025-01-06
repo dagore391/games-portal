@@ -1,0 +1,67 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+		<section>
+			<div class="margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo LANG_SEARCH; ?></b>&#11167;
+				</div>
+				<div class="border1-gray gradient-gray2 padding5"><a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <b><?php echo LANG_SEARCH . ' (' . CONTEXT['SEARCH_VALUE'] . ')'; ?></b></div>
+			</div>
+		</section>
+		<!-- Results List -->
+		<?php
+			if(CONTEXT['RESULTS']['TOTAL'] > 0) {
+				if(sizeof(CONTEXT['RESULTS']['GAMES']) > 0) {
+					$idx = 1;
+					echo '<div class="flex flex-valign-center margin20">
+						<h1>' . LANG_GAMES . ' (' . sizeof(CONTEXT['RESULTS']['GAMES']) . ')</h1>
+					</div>
+					<section class="border1-gray margin10">';
+					foreach(CONTEXT['RESULTS']['GAMES'] as $row) {
+						echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+							<div class="flex flex-valign-center">
+								<div class="flex flex-valign-center margin10">
+									<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-color syslabel-color-' . $row->platform_colour . '">&nbsp;</span><span class="flex syslabel-text">' . $row->platform_tag . '</span></a>
+								</div>
+								<div class="flex-valign-center">
+									<a class="flex link-black margin-bottom5" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_SHOW, array($row->platform_tag, $row->game_id, 'info')) . '"><b>' . $row->game_name . '</b></a>
+									<p class="flex font-11 font-white">' . $row->game_genres . '</p>
+								</div>
+							</div>
+							<div class="flex margin10">
+								<div class="border1-blue font-white gradient-blue padding5 text-center" style="width: 64px">
+									<p class="font-10">Web</p>
+									<p class="font-14"><b>' . ($row->game_webavg != null ? $row->game_webavg : 'S/N') . '</b></p>
+								</div>
+								<div class="border1-gray2 font-black lgradient lgradient-gray padding5 text-center width-64px">
+									<p class="font-10">' . LANG_MEDIA . '</p>
+									<p class="font-14"><b>' . ($row->game_mediaavg != null ? $row->game_mediaavg : 'S/N') . '</b></p>
+								</div>
+								<div class="border1-black font-white lgradient lgradient-gray2 padding5 text-center" style="width: 64px">
+									<p class="font-10">' . LANG_USERS . '</p>
+									<p class="font-14"><b>' . ($row->game_useravg != null ? $row->game_useravg : 'S/N') . '</b></p>
+								</div>
+							</div>
+						</article>';
+						$idx++;
+					}
+					echo '</section>';
+				}
+			} else {
+				echo '<section class="border1-gray margin10"><div class="margin20 text-center">' . LANG_NO_RESULTS_FOUND . '</div></section>';
+			}
+		?>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

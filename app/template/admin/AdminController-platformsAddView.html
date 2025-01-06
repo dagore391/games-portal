@@ -1,0 +1,51 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTPLATFORM, array(1)); ?>"><?php echo LANG_PLATFORMS; ?></a> &#187; <b><?php echo LANG_NEW; ?></b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo LANG_NEW_PLATFORM; ?></div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_ADDPLATFORM); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="addplatform-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="name"><b><?php echo LANG_NAME; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-50" id="name" name="name" maxlength="50" placeholder="<?php echo LANG_NAME; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['NAME']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="tag"><b><?php echo LANG_TAG; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5" id="tag" name="tag" maxlength="3" placeholder="<?php echo LANG_TAG; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['TAG']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="release_date"><b><?php echo LANG_RELEASE_DATE; ?></b></label><br>
+						<input class="vmargin5" id="release_date" name="release_date" placeholder="<?php echo LANG_RELEASE_DATE; ?>..." type="date" value="<?php echo CONTEXT['FORMDATA']['RELEASE_DATE']; ?>">
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="colour"><b><?php echo LANG_COLOUR; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5" id="colour" name="colour" maxlength="20" placeholder="<?php echo LANG_COLOUR; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['COLOUR']; ?>" required>
+					</div>
+					<div class="flex flex-valign-center vmargin5 rpadding10">
+						<label class="vmargin5" for="featured"><b><?php echo LANG_FEATURED; ?></b></label>
+						<?php if(CONTEXT['FORMDATA']['FEATURED'] == '1') { ?>
+						<input class="hmargin10 vmargin5 vmargin5" id="featured" name="featured" type="checkbox" value="1" checked>
+						<?php } else { ?>
+						<input class="hmargin10 vmargin5 vmargin5" id="featured" name="featured" type="checkbox" value="1"/>
+						<?php } ?>
+					</div>
+					<input class="button button-red" name="platform-submit" type="submit" value="<?php echo LANG_NEW; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

@@ -1,0 +1,53 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMETAGROUP, array(1)); ?>"><?php echo LANG_METAGROUPS; ?></a> &#187; <b><?php echo LANG_NEW; ?></b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo LANG_NEW_METAGROUP; ?></div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_ADDMETAGROUP); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="addmetagroup-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="name"><b><?php echo LANG_NAME; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="name" name="name" maxlength="100" placeholder="<?php echo LANG_NAME; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['NAME']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="tag"><b><?php echo LANG_TAG; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="tag" name="tag" maxlength="100" placeholder="<?php echo LANG_TAG; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['TAG']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="infotype"><b><?php echo LANG_TYPE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<select class="vmargin5" id="infotype" name="infotype" required>
+							<?php
+								foreach(CONTEXT['INFO_TYPES'] as $key => $value) {
+									if($key == CONTEXT['FORMDATA']['INFOTYPE']) {
+										echo '<option value="' . $key . '" selected>' . $value . '</option>';
+									} else {
+										echo '<option value="' . $key . '">' . $value . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="relevance"><b><?php echo LANG_RELEVANCE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5" id="relevance" name="relevance" type="number" value="<?php echo CONTEXT['FORMDATA']['RELEVANCE']; ?>" required>
+					</div>
+					<input class="button button-red" name="game-submit" type="submit" value="<?php echo LANG_NEW; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

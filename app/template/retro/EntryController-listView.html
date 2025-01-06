@@ -1,0 +1,104 @@
+<?php
+	use app\config\Urls;
+	use app\data\EntryCategoriesConstants;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+		<!-- Games Filters -->
+		<section>
+			<div class="margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo CONTEXT['TITLE']; ?></b>&#11167;
+				</div>
+				<div class="border1-gray gradient-gray2 padding5"><a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <b><?php echo CONTEXT['TITLE']; ?></b></div>
+			</div>
+		</section>
+		<!-- Games List -->
+		<section class="border1-gray margin10">
+			<?php
+				if(sizeof(CONTEXT['ENTRIES']) > 0) {
+					$idx = 1;
+					foreach(CONTEXT['ENTRIES'] as $row) {
+						$row->platform_tag = !is_null($row->platform_tag) ? $row->platform_tag : 'all';
+						$row->platform_name = !is_null($row->platform_name) ? $row->platform_name : LANG_MULTI_PLATFORM;
+						if($row->entry_category === EntryCategoriesConstants::ARTICLE || $row->entry_category === EntryCategoriesConstants::NEWS || $row->entry_category === EntryCategoriesConstants::RUMOUR) {
+							echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+								<div class="flex flex-valign-center">
+									<div class="flex flex-valign-center margin10">
+										<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-text" title="' . $row->platform_name . '">' . $row->platform_tag . '</span></a>
+									</div>
+									<div class="flex-valign-center">
+										<a class="flex link-black margin-bottom5" href="' . Urls::getUrl(UrlsEnum::ENTRY_VIEW_SHOW, array($row->entry_category, $row->entry_id, 1)) . '"><b>' . $row->entry_title . '</b></a>
+										<p class="flex font-11 font-gray4">' . $row->member_username . '</p>
+									</div>
+								</div>
+								<div class="flex margin10">' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->entry_published)) . '</div>
+							</article>';
+						} elseif($row->entry_category === EntryCategoriesConstants::FAQ) {
+							echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+								<div class="flex flex-valign-center">
+									<div class="flex flex-valign-center margin10">
+										<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-text" title="' . $row->platform_name . '">' . $row->platform_tag . '</span></a>
+									</div>
+									<div class="flex-valign-center">
+										<a class="flex link-black margin-bottom5" href="' . Urls::getUrl(UrlsEnum::ENTRY_VIEW_SHOW, array($row->entry_category, $row->entry_id, 1)) . '"><b>' . $row->entry_title . '</b></a>
+										<p class="flex font-11 font-gray4">' . (!is_null($row->game_name) ? $row->game_name : 'all') . '</p>
+									</div>
+								</div>
+								<div class="flex margin10">' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->entry_published)) . '</div>
+							</article>';
+						} elseif($row->entry_category === EntryCategoriesConstants::PREVIEW) {
+							echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+								<div class="flex flex-valign-center">
+									<div class="flex flex-valign-center margin10">
+										<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-text" title="' . $row->platform_name . '">' . $row->platform_tag . '</span></a>
+									</div>
+									<div class="flex-valign-center">
+										<a class="flex link-black margin-bottom5" href="' . Urls::getUrl(UrlsEnum::ENTRY_VIEW_SHOW, array($row->entry_category, $row->entry_id, 1)) . '"><b>' . $row->entry_title . '</b></a>
+										<p class="flex font-11 font-gray4">' . (!is_null($row->game_name) ? $row->game_name : 'all') . '</p>
+									</div>
+								</div>
+								<div class="flex margin10">' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->entry_published)) . '</div>
+							</article>';
+							$idx++;
+						} elseif($row->entry_category === EntryCategoriesConstants::REVIEW) {
+							echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+								<div class="flex flex-valign-center">
+									<div class="flex flex-valign-center margin10">
+										<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-text" title="' . $row->platform_name . '">' . $row->platform_tag . '</span></a>
+									</div>
+									<div class="flex-valign-center">
+										<a class="flex link-black margin-bottom5" href="' . Urls::getUrl(UrlsEnum::ENTRY_VIEW_SHOW, array($row->entry_category, $row->entry_id, 1)) . '"><b>' . $row->entry_title . '</b></a>
+										<p class="flex font-11 font-gray4">' . (!is_null($row->game_name) ? $row->game_name : 'all') . '</p>
+									</div>
+								</div>
+								<div class="flex margin10">
+									<div class="border1-blue font-white gradient-blue padding5 text-center width-64px">
+										<p class="font-10">Valoración</p>
+										<p class="font-14"><b>' . ($row->entry_score != null ? $row->entry_score : '0.0') . '</b></p>
+									</div>
+								</div>
+							</article>';
+						}
+						$idx++;
+					}
+				} else {
+					echo '<div class="margin20 text-center">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</section>
+		<!-- Games Pagination -->
+		<section class="margin-bottom10 padding10">
+			<?php echo CONTEXT['PAGINATION']; ?>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

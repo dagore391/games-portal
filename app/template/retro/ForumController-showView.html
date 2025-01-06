@@ -1,0 +1,98 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<?php $forumId = CONTEXT['FORUM']->forum_id; ?>
+	<!-- Content -->
+	<main class="main ccentral-left">
+		<!-- Forum -->
+		<section class="padding10">
+			<div class="border1-gray padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_INDEX, array()); ?>"><b><?php echo LANG_FORUMS; ?></b></a> / <?php echo CONTEXT['FORUM']->forum_title; ?></div>
+			<div class="border1-blue font-white lgradient lgradient-blue text-center uppercase vmargin5">
+				<div class="padding10"><b><?php echo CONTEXT['FORUM']->forum_title; ?></b></div>
+			</div>
+			<div class="info vmargin5 padding10"><?php echo CONTEXT['FORUM']->forum_description; ?></div>
+			<?php
+				if(CONTEXT['SECURITY']['AUTH']::isAuthenticated()) {
+					echo '<div class="padding10 text-right"><a class="button button-orange" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_NEWTOPIC, array($forumId)) . '">' . LANG_NEW_TOPIC . '</a></div>';
+				}
+				if(sizeof(CONTEXT['FORUMS']) > 0) {
+					echo '<table class="table margin-bottom20 text-left width-100">
+						<tr class="border1-blue font-white lgradient lgradient-blue">
+							<th class="padding10 text-center uppercase" colspan="4"><b>' . LANG_SUBFORUMS . '</b></th>
+						</tr>';
+					foreach(CONTEXT['FORUMS'] as $forumCategory) {
+						echo '<tr class="border1-gray font-dark lgradient lgradient-gray">
+							<th class="padding10" width="55%">' . LANG_FORUM . '</th>
+							<th class="padding10">' . LANG_MESSAGES . '</th>
+							<th class="padding10" width="30%">' . LANG_LAST_REPLY . '</th>
+						</tr>';
+						if(sizeof($forumCategory['forums']) > 0) {
+							foreach($forumCategory['forums'] as $singleForum) {
+								echo '<tr class="border1-gray bg-white">
+									<td class="padding10">
+										<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOW, array($singleForum['id'], 1)) . '"><b>' . $singleForum['title'] . '</b></a>
+										<p>' . $singleForum['description'] . '</p>
+									</td>
+									<td class="padding10">' . sizeof($singleForum['posts']) . '</td>
+									<td class="padding10">' . (!is_null($singleForum['last_post']) ? '<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($singleForum['last_post']->member_id)) . '"><b>' . $singleForum['last_post']->member_username . '</b></a> en <a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($singleForum['last_post']->member_id)) . '"><b>' . $singleForum['last_post']->member_username . '</b></a> en <a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($singleForum['id'], $singleForum['last_post']->post_topic, 1)) . '"><b>' . $singleForum['last_post']->post_title . '</b></a>' : 'No hay mensajes') . '</td>
+								</tr>';
+							}
+						}
+						echo '<tr class="border1-gray bg-white">
+							<td class="lgradient lgradient-gray padding5" colspan="3"></td>
+						</tr>';
+					}
+					echo '</table>';
+				}
+				echo '<table class="table vmargin5 text-left width-100">
+					<tr class="border1-blue font-white lgradient lgradient-blue text-center uppercase">
+						<th class="padding10" colspan="4">' . LANG_MESSAGES . '</th>
+					</tr>
+					<tr class="border1-gray font-dark lgradient lgradient-gray">
+						<th class="padding10 text-center" width="5%">#</th>
+						<th class="padding10" width="65%">' . LANG_TITLE . '</th>
+						<th class="padding10 text-center">' . LANG_MESSAGES . '</th>
+						<th class="padding10 text-center" width="20%">' . LANG_LAST_REPLY . '</th>
+					</tr>';
+				if(sizeof(CONTEXT['FORUM_TOPICS']) > 0) {
+					foreach(CONTEXT['FORUM_TOPICS'] as $topic) {
+						echo '<tr class="border1-gray bg-white">
+							<td class="padding10 text-center">
+							</td>
+							<td class="padding10">
+								<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($forumId, $topic->topic_id, 1)) . '"><b>' . $topic->topic_title . '</b></a>
+							</td>
+							<td class="padding10 text-center">' . $topic->topic_total_posts . '</td>
+							<td class="padding10 text-center">' . date(LANGCONFIG_DATE_FORMAT, strtotime($topic->topic_published)) . '</td>
+						</tr>';
+					}
+				} else {
+					echo '<tr class="border1-gray bg-white text-center">
+						<td class="padding10" colspan="4">' . LANG_NO_RESULTS_FOUND . '</td>
+					</tr>';
+				}
+				
+				echo '<tr class="border1-gray">
+						<td class="lgradient lgradient-gray padding5" colspan="4"></td>
+					</tr>
+				</table>';
+				if(CONTEXT['SECURITY']['AUTH']::isAuthenticated()) {
+					echo '<div class="padding10 text-right"><a class="button button-orange" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_NEWTOPIC, array($forumId)) . '">' . LANG_NEW_TOPIC . '</a></div>';
+				}
+			?>
+			<!-- Forum Pagination -->
+			<section class="margin-bottom10 padding10">
+				<?php echo CONTEXT['PAGINATION']; ?>
+			</section>
+		</section>
+	</main>
+	<!-- Right Aside -->
+	<?php include_once 'inc/forumRightAsideInc.html'; ?>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

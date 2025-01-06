@@ -1,0 +1,47 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+	<section>
+			<div class="margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo LANG_COMPANIES; ?></b>&#11167;
+				</div>
+				<div class="border1-gray gradient-gray2 padding5"><a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <b><?php echo LANG_COMPANIES; ?></b></div>
+			</div>
+		</section>
+		<!-- Company List -->
+		<section class="border1-gray margin10">
+			<?php
+				if(sizeof(CONTEXT['COMPANIES']) > 0) {
+					$idx = 1;
+					foreach(CONTEXT['COMPANIES'] as $row) {
+						echo '<article class="border-bottom1-gray flex flex-halign-justify flex-valign-center ' . ($idx % 2 === 0 ? 'bg-white' : 'bg-blue2') . '">
+							<div class="flex flex-valign-center margin10">
+								<a class="link-black" href="' . Urls::getUrl(UrlsEnum::COMPANY_VIEW_SHOW, array($row->company_id)) . '"><b>' . $row->company_name . '</b></a>
+							</div>
+							<div class="margin10">' . $row->company_games . ' ' . strtolower(LANG_GAMES) . '</div>
+						</article>';
+						$idx++;
+					}
+				} else {
+					echo '<div class="margin20 text-center">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</section>
+		<!-- Company Pagination -->
+		<section class="margin-bottom10 padding10">
+			<?php echo CONTEXT['PAGINATION']; ?>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

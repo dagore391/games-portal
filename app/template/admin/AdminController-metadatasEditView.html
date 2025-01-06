@@ -1,0 +1,44 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMETADATA, array(1)); ?>"><?php echo LANG_METADATAS; ?></a> &#187; <b><?php echo CONTEXT['METADATA']->metadata_value . ' - ' . CONTEXT['METADATA']->metagroup_name; ?> (<?php echo LANG_EDIT; ?>)</b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo CONTEXT['METADATA']->metadata_value . ' - ' . CONTEXT['METADATA']->metagroup_name; ?> (<?php echo LANG_EDIT; ?>)</div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_EDITMETADATA, array(CONTEXT['METADATA']->metadata_id)); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="editmetadata-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="value"><b><?php echo LANG_VALUE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="value" name="value" maxlength="200" placeholder="<?php echo LANG_VALUE; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['VALUE']; ?>" required>
+					</div>
+					<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+						<div class="vmargin5 rpadding10">
+							<label class="vmargin5" for="group"><b><?php echo LANG_GROUP; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+							<input class="vmargin5 width-100" id="group" list="metagroups" name="group" value="<?php echo CONTEXT['FORMDATA']['GROUP']; ?>"  required>
+							<datalist id="metagroups">
+								<?php
+									foreach(CONTEXT['METAGROUPS'] as $row) {
+										echo '<option value="' . $row->metagroup_id . '">' . $row->metagroup_name . '</option>';
+									}
+								?>
+							</datalist>
+						</div>
+					</div>
+					<input class="button button-red" name="game-submit" type="submit" value="<?php echo LANG_SAVE_CHANGES; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

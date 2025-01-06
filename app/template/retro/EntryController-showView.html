@@ -1,0 +1,107 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccolumn main">
+		<div class="margin10">
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+		</div>
+		<!-- Game Content -->
+		<section>
+			<div class="margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo CONTEXT['ENTRY']->entry_title; ?></b>&#11167;
+				</div>
+				<div class="border1-gray gradient-gray2 padding5"><a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(CONTEXT['ENTRY']->entry_category, 1)); ?>"><?php echo CONTEXT['ENTRYLIST_LINK_NAME']; ?></a> &#187; <b><?php echo LANG_DETAILS; ?></b></div>
+			</div>
+			<div class="margin10">
+				<h2 class="padding5">
+					<?php echo CONTEXT['ENTRY']->entry_resume != null ? CONTEXT['ENTRY']->entry_resume : ''; ?>
+				</h2>
+			</div>
+			<div class="border1-gray margin10">
+				<div class="padding5">
+					<?php echo CONTEXT['ENTRY']->entry_content != null ? CONTEXT['ENTRY']->entry_content : '<p class="text-center">' . LANG_NO_CONTENT . '</p>'; ?>
+				</div>
+			</div>
+			<div class="margin10">
+				<table class="table text-left width-100">
+					<tr class="border1-blue font-white lgradient lgradient-blue text-center uppercase">
+						<th class="padding10" colspan="2"><?php echo LANG_COMMENTS; ?></th>
+					</tr>
+					<?php
+					if(sizeof(CONTEXT['ENTRY_COMMENTS']) > 0) {
+						foreach(CONTEXT['ENTRY_COMMENTS'] as $row) {
+							echo '<tr class="border1-gray bg-white">
+								<td class="lgradient lgradient-gray padding5" colspan="2"></td>
+							</tr>
+							<tr class="border1-gray bg-white font-dark">
+								<td class="valign-top" width="20%">
+									<div class="border1-gray lgradient lgradient-white margin10 padding5 text-center uppercase"><a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($row->member_id)) . '"><b>' . $row->member_username . '</b></a></div>
+									 <div class="hmargin10 text-center"><img alt="' . $row->member_username . '" class="border1-gray3 comment-avatar" src="' . $row->member_avatar . '" title="' . $row->member_username . '"></div>
+									 <div class="margin10 text-center uppercase">
+										<b>' . $row->member_account_group . '</b>
+									</div>
+								</td>
+								<td class="padding10 valign-top">
+									<div class="padding5">' . $row->comment_content . '</div>
+								</td>
+							</tr>
+							<tr class="border1-gray bg-white">
+								<td class="border1-gray lgradient lgradient-white padding10 margin-bottom10" colspan="2">
+									<div class="flex flex-halign-justify flex-valign-center">
+										<span>&#128197;&nbsp;' . date(LANGCONFIG_DATEHOUR_FORMAT, strtotime($row->comment_published)) . '</span>
+										<div>';
+											app\file\TemplateHtml::getUserReportPostButton($row->member_id, strtolower(app\data\ReportTypesConstants::TYPE_COMMENT), $row->comment_id);
+											echo '&nbsp;';
+										echo '</div>
+									</div>
+								</td>
+							</tr>';
+						} 
+					} else {
+						echo '<tr class="text-center">
+							<td class="padding10" colspan="2">' . LANG_NO_COMMENTS . '</td>
+						</tr>';
+					}
+				?>
+					<tr class="border1-gray bg-white">
+						<td class="lgradient lgradient-gray padding5" colspan="2"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="border1-gray margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo LANG_WRITE_YOUR_COMMENT; ?></b>
+				</div>
+				<div class="padding10">
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ENTRY_VIEW_NEWCOMMENT, array(strtolower(CONTEXT['ENTRY']->entry_category), CONTEXT['ENTRY']->entry_id)); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="newtopic-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="vmargin10 rpadding10">
+							<textarea class="vmargin5 width-100" id="content" name="content" placeholder="<?php echo LANG_WRITE_YOUR_COMMENT; ?>..." rows="15" required><?php echo CONTEXT['FORMDATA']['CONTENT']; ?></textarea>
+						</div>
+						<div class="text-right">
+							<input class="button button-blue" name="comment-submit" type="submit" value="<?php echo LANG_POST_COMMENT; ?>">
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Comments Pagination -->
+		<section class="margin-bottom10 padding10">
+			<?php echo CONTEXT['PAGINATION']; ?>
+		</section>
+	</main>
+	<!-- Right Aside -->
+	<?php include_once 'inc/entryRightAsideInc.html'; ?>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

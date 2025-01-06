@@ -1,0 +1,283 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccolumn main">
+		<?php $platformTag = CONTEXT['GAME']->platform_tag; ?>
+		<!-- Game Content -->
+		<section>
+			<div class="margin10">
+				<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+					<b class="uppercase"><?php echo CONTEXT['GAME']->game_name; ?></b><label class="flex syslabel" title="<?php echo CONTEXT['GAME']->platform_name; ?>"><span class="flex syslabel-text"><b><?php echo CONTEXT['GAME']->platform_tag; ?></b></span></label>
+				</div>
+				<div class="border1-gray gradient-gray2 padding5"><a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array('all', 'all', 1)); ?>"><?php echo LANG_GAMES; ?></a> &#187; <a class="link-gray2" href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($platformTag, 'all', 1)); ?>"><?php echo CONTEXT['GAME']->platform_name; ?></a> &#187; <b><?php echo CONTEXT['GAME']->game_name; ?></b></div>
+			</div>
+			<div class="border1-gray margin10">
+				<div class="flex padding5">
+					<div class="flex flex-valign-start">
+						<img alt="<?php echo CONTEXT['GAME']->game_name; ?>" class="cover-img2 margin10" src="<?php echo CONTEXT['GAME']->game_cover; ?>" title="<?php echo CONTEXT['GAME']->game_name; ?> (<?php echo CONTEXT['GAME']->platform_name; ?>)">
+					</div>
+					<div class="border1-gray flex flex-halign-center flex-valign-center font-13 margin10 width-100">
+						<div class="game-resume"><?php echo CONTEXT['GAME']->game_resume != null ? CONTEXT['GAME']->game_resume : LANG_WITHOUT_DESCRIPTION; ?></div>
+					</div>
+				</div>
+				<div class="flex flex-valign-center flex-halign-center margin-bottom10">
+				<?php if(CONTEXT['SECURITY']['AUTH']::isAuthenticated()) { ?>
+					<?php if(CONTEXT['USER_RATED'] != null) { ?>
+						<div class="flex flex-valign-center vmargin20"><?php echo LANG_YOUR_RATING_IS; ?><b class="font-16 margin5"><?php echo CONTEXT['USER_RATED']->score; ?></b>(<a class="link-red" href="<?php echo Urls::getUrl(UrlsEnum::GAME_ACTION_REMOVERATE, array($platformTag, CONTEXT['GAME']->game_id)); ?>"><?php echo LANG_REMOVE; ?></a>)</div>
+					<?php } else { ?>
+					<form action="<?php echo Urls::getUrl(UrlsEnum::GAME_ACTION_RATE, array($platformTag, CONTEXT['GAME']->game_id)); ?>" class="vmargin20" method="post">
+						<label for="game-rate"><b><?php echo LANG_RATE; ?></b></label>
+						<select class="margin5" id="game-rate" name="game-rate">
+							<option value=""><?php echo LANG_SELECT; ?></option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+						<input class="button button-blue" name="game-rate-submit" type="submit" value="<?php echo LANG_SEND; ?>">
+					</form>
+					<?php } ?>
+				<?php } else { ?>
+					<div class="flex flex-valign-center vmargin20"><?php echo LANG_YOU_MUST_BE_AUTHENTICATED; ?></div>
+				<?php } ?>
+				</div>
+				<div class="border1-gray gradient-gray2 flex flex-halign-center padding5 margin5">
+					<?php
+						$idx = 0;
+						foreach(CONTEXT['GAMEMENU'] as $row) {
+							if(isset($_GET['section']) && $_GET['section'] == $row['tag']) {
+								echo '<b>' . $row['name'] . '</b>';
+							} else {
+								echo '<a class="link-gray2" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_SHOW, array(CONTEXT['GAME']->platform_tag, CONTEXT['GAME']->game_id, $row['tag'])) . '">' . $row['name'] . '</a>';
+							}
+							$idx++;
+							if($idx != sizeof(CONTEXT['GAMEMENU'])) {
+								echo '<span class="hmargin5">|</span>';
+							}
+						}
+					?>
+				</div>
+			</div>
+		</section>
+		<?php if(isset($_GET['section']) && $_GET['section'] == 'info') { ?>
+		<!-- Game Info -->
+		<section class="border1-gray margin10">
+			<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+				<b><?php echo LANG_DETAILS; ?></b>&#11167;
+			</div>
+			<div class="flex flex-wrap padding5">
+				<?php if(CONTEXT['GAME']->game_release_date != null) { ?>
+				<div class="width-50">
+					<div class="vmargin5">
+						<span class="padding5"><?php echo LANG_RELEASE_DATE; ?>:</span>
+						<div class="flex margin5"><span class="border1-gray flex font-10 gradient-gray2 margin1 padding3"><?php echo CONTEXT['GAME']->game_release_date; ?></span></div>
+					</div>
+				</div>
+				<?php } ?>
+				<?php if(CONTEXT['GAME']->game_release_price != null) { ?>
+				<div class="width-50">
+					<div class="vmargin5">
+						<span class="padding5"><?php echo LANG_RELEASE_PRICE; ?>:</span>
+						<div class="flex margin5"><span class="border1-gray flex font-10 gradient-gray2 margin1 padding3"><?php echo CONTEXT['GAME']->game_release_price; ?></span></div>
+					</div>
+				</div>
+				<?php } ?>
+				<?php if(CONTEXT['GAME']->game_developers != null) { ?>
+				<div class="width-50">
+					<div class="vmargin5">
+						<span class="padding5"><?php echo LANG_DEVELOPER; ?>:</span>
+						<div class="flex">
+							<div class="flex flex-valign-start flex-wrap margin5"><?php echo CONTEXT['GAME']->game_developers; ?></div>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+				<?php if(CONTEXT['GAME']->game_publishers != null) { ?>
+				<div class="width-50">
+					<div class="vmargin5">
+						<span class="padding5"><?php echo LANG_PUBLISHER; ?>:</span>
+						<div class="flex">
+							<div class="flex flex-valign-start flex-wrap margin5"><?php echo CONTEXT['GAME']->game_publishers; ?></div>
+						</div>
+					</div>
+				</div>
+				<?php } ?>
+			<?php
+				// Metadatas.
+				$group = null;
+				foreach(CONTEXT['GAME']->game_metadata as $metagroup) {
+					$dataString = "";
+					if($group != $metagroup->metagroup_id) {
+						echo '<div class="width-50"><div class="vmargin5"><span class="padding5">' . $metagroup->metagroup_name . ':</span>';
+						foreach(CONTEXT['GAME']->game_metadata as $metadata) {
+							if($metagroup->metagroup_id == $metadata->metagroup_id) {
+								if(isset($metadata->metadata_picture)) {
+									$dataString .= '<img alt="' . $metadata->metagroup_tag . ' ' . $metadata->metadata_value . '" class="agerating-img margin1" src="' . $metadata->metadata_picture . '">';
+								} else {
+									$dataString .= '<span class="border1-gray flex font-10 gradient-gray2 margin1 padding3">' . $metadata->metadata_value . '</span>';
+								}
+							}
+						}
+						echo '<div class="flex flex-valign-start flex-wrap margin5">' . $dataString . '</div></div></div>';
+					}
+					$group = $metagroup->metagroup_id;
+				}
+			?>
+			</div>
+		</section>
+		<?php if(isset(CONTEXT['GAME_SCREENSHOTS']) && sizeof(CONTEXT['GAME_SCREENSHOTS']) > 0) { ?>
+		<!-- Game Screenshots -->
+		<section class="border1-gray margin10">
+			<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+				<b>Imágenes</b>&#11167;
+			</div>
+			<div class="flex flex-wrap padding5">
+			<?php
+				foreach(CONTEXT['GAME_SCREENSHOTS'] as $screenshot) {
+					echo '<div class="flex flex-3"><span class="border1-gray margin5"><img class="cursor-pointer flex width-100 link-opacity" alt="' . CONTEXT['GAME']->game_name . '" onclick="showFullImage(this);" src="' . $screenshot . '"/></span></div>';
+				}
+			?>
+			</div>
+		</section>
+		<?php } ?>
+		<?php } else if(isset($_GET['section']) && $_GET['section'] == 'entries') {
+			$categories = array(
+				'article' => LANG_ARTICLES,
+				'news' => LANG_NEWS,
+				'preview' => LANG_PREVIEWS,
+				'review' => LANG_REVIEWS,
+				'rumour' => LANG_RUMOURS
+			);
+			foreach($categories as $key => $categoryName) {
+				echo '<section class="border1-gray margin10">
+					<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+						<b>' . $categoryName . '</b>&#11167;
+					</div>';
+				$idx = 0;
+				foreach(CONTEXT['GAME_ENTRIES'] as $entry) {
+					if($entry->entry_category == strtoupper($key)) {
+						echo '<article class="border-bottom1-gray padding10">
+							<div class="flex flex-halign-justify flex-valign-center">
+								<div class="flex flex-valign-center">
+								<span>&#11208;</span>
+								<a class="link-gray2 hmargin5" href="#"><b>' . $entry->entry_title . '</b></a></div>
+								<label class="font-gray9">' . date('%d/%m/%Y', strtotime($entry->entry_published)) . '</label>
+							</div>
+						</article>';
+						$idx++;
+					}
+				}
+				if($idx == 0) {
+					echo '<div class="flex flex-halign-center flex-valign-center padding10">' . LANG_NO_ENTRIES . '</div>';
+				}
+				echo '</section>';
+			}
+		}  else if(isset($_GET['section']) && $_GET['section'] == 'faqs') {
+			echo '<section class="border1-gray margin10">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+					<b>' . LANG_FAQS . '</b>&#11167;
+				</div>';
+			if(isset(CONTEXT['GAME_FAQS']) && sizeof(CONTEXT['GAME_FAQS']) > 0) {
+				foreach(CONTEXT['GAME_FAQS'] as $row) {
+					echo '<article class="border-bottom1-gray padding10">
+						<div class="flex flex-halign-justify flex-valign-center">
+							<div class="flex flex-valign-center">
+							<span>&#11208;</span>
+							<a class="link-gray2 hmargin5" href="#"><b>' . $row->entry_title . '</b></a></div>
+							<label class="font-gray9">' . date('%d/%m/%Y', strtotime($row->entry_published)) . '</label>
+						</div>
+					</article>';
+				}
+			} else {
+				echo '<div class="flex flex-halign-center flex-valign-center padding10">' . LANG_NO_ENTRIES . '</div>';
+			}
+			echo '</section>';
+		} else if(isset($_GET['section']) && $_GET['section'] == 'achievements') {
+			$totalAchievements = sizeof(CONTEXT['GAME_ACHIEVEMENTS']);
+			echo '<section class="border1-gray margin10">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+					<b>' . LANG_ACHIEVEMENTS . ' (' . $totalAchievements . ')</b>&#11167;
+				</div>';
+			if($totalAchievements > 0) {
+				foreach(CONTEXT['GAME_ACHIEVEMENTS'] as $row) {
+					echo '<article class="border-bottom1-gray lgradient lgradient-white padding10">
+						<div class="flex flex-halign-justify flex-valign-center">
+							<div class="margin5">
+								<div class="margin-bottom5"><b>' . $row->achievement_title . '</b></div>
+								<label class="font-gray4">' . $row->achievement_description . '</label>
+							</div>
+							<b class="margin5">' . $row->achievement_value . '</b>
+						</div>
+					</article>';
+				}
+			} else {
+				echo '<div class="flex flex-halign-center flex-valign-center padding10">' . LANG_NO_ACHIEVEMENTS . '</div>';
+			}
+			echo '</section>';
+		} else if(isset($_GET['section']) && $_GET['section'] == 'cheats') {
+			echo '<section class="border1-gray margin10">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+					<b>' . LANG_CHEATS . '</b>&#11167;
+				</div>';
+			if(sizeof(CONTEXT['GAME_CHEATS']) > 0) {
+				foreach(CONTEXT['GAME_CHEATS'] as $row) {
+					echo '<article class="border-bottom1-gray lgradient lgradient-white padding10">
+						<div class="flex flex-halign-justify flex-valign-center">
+							<div class="margin5">
+								<div class="margin-bottom5">
+									<b class="margin-bottom5">' . $row->cheat_title . '</b>
+									<div class="font-10 font-gray9 margin-bottom5">' . LANG_PUBLISHED_BY . ' <a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($row->member_id)) . '"><b>' . $row->member_username . '</b></a></div>
+								</div>
+								<label class="font-gray4">' . $row->cheat_description . '</label>
+							</div>
+						</div>
+					</article>';
+				}
+			} else {
+				echo '<div class="flex flex-halign-center flex-valign-center padding10">' . LANG_NO_ACHIEVEMENTS . '</div>';
+			}
+			echo '</section>';
+		}  else if(isset($_GET['section']) && $_GET['section'] == 'images') {
+			echo '<section class="border1-gray margin10">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-gray padding5">
+					<b>' . LANG_IMAGES . '</b>&#11167;
+				</div>';
+			if(isset(CONTEXT['GAME_SCREENSHOTS']) && sizeof(CONTEXT['GAME_SCREENSHOTS']) > 0) {
+				echo '<div class="flex flex-wrap padding5">';
+				foreach(CONTEXT['GAME_SCREENSHOTS'] as $screenshot) {
+					echo '<div class="flex flex-3"><span class="border1-gray margin5"><img class="cursor-pointer flex width-100 link-opacity" alt="' . CONTEXT['GAME']->game_name . '" onclick="showFullImage(this);" src="' . $screenshot . '"/></span></div>';
+				}
+				echo '</div>';
+			} else {
+				echo '<div class="flex flex-halign-center flex-valign-center padding10">' . LANG_NO_RESULTS_FOUND . '</div>';
+			}
+			echo '</section>';
+		} ?>
+	</main>
+	<!-- Image Modal -->
+	<div id="modal-wrap" class="modal">
+		<span class="close-modal">&times;</span>
+		<img class="modal-content" id="modal-image" title="Modal image"/>
+	</div>
+	<!-- Scripts -->
+	<script src="<?php echo \app\file\SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'js/jquery.min.js'); ?>" type="application/javascript"></script>
+	<script src="<?php echo \app\file\SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'js/modal.js'); ?>" type="application/javascript"></script>
+	<!-- Right Aside -->
+	<?php include_once 'inc/gameRightAsideInc.html'; ?>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

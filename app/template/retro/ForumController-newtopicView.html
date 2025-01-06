@@ -1,0 +1,45 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<!-- Content -->
+	<main class="main wrap">
+		<div class="padding10">
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+		</div>
+		<!-- Topic -->
+		<section class="padding10">
+			<?php
+				$topicForumId = CONTEXT['TOPIC']->forum_id;
+				$topicAuthorId = CONTEXT['TOPIC']->member_id; 
+			?>
+			<div class="border1-gray padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_INDEX); ?>"><b><?php echo LANG_FORUMS; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOW, array(CONTEXT['FORUM']->forum_id, 1)); ?>"><b><?php echo CONTEXT['FORUM']->forum_title; ?></b></a> / <?php echo LANG_NEW_TOPIC; ?></div>
+			<div class="border1-blue font-white lgradient lgradient-blue text-center uppercase vmargin5">
+				<div class="padding10"><b><?php echo LANG_NEW_TOPIC; ?></b></div>
+			</div>
+			<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::FORUM_ACTION_NEWPOST, array(CONTEXT['TOPIC']->forum_id, CONTEXT['TOPIC']->topic_id)); ?>" autocomplete="off" class="margin-bottom10 padding10" enctype="application/x-www-form-urlencoded" method="post" name="newpost-form" target="_self">
+				<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+				<div class="vmargin10 rpadding10">
+					<input class="vmargin5 width-100" id="title" name="title" placeholder="<?php echo LANG_TITLE; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['TITLE']; ?>" required/>
+				</div>
+				<div class="vmargin10 rpadding10">
+					<textarea class="vmargin5 width-100" id="content" name="content" placeholder="<?php echo LANG_CONTENT; ?>..." rows="30" required><?php echo CONTEXT['FORMDATA']['CONTENT']; ?></textarea>
+				</div>
+				<div class="text-right">
+					<input class="button button-blue" name="post-submit" type="submit" value="<?php echo LANG_CREATE; ?>">
+				</div>
+			</form>
+			<!-- Forum Pagination -->
+			<section class="margin-bottom10 padding10">
+				<?php echo CONTEXT['PAGINATION']; ?>
+			</section>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

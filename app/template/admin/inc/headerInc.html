@@ -1,0 +1,25 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	use app\file\SecureImport
+?>
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="<?php echo CONTEXT['META']['CHARSET']; ?>">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="<?php echo SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'css/default.css'); ?>" rel="stylesheet" type="text/css">
+		<title><?php echo CONTEXT['META']['TITLE']; ?></title>
+	</head>
+	<body>
+		<div class="wrap">
+			<nav class="nav">
+				<span class="nav-title"><?php echo LANG_ADMIN_PANEL; ?></span>
+				<ul class="top-links">
+					<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>" target="_blank"><?php echo LANG_VIEW_WEBSITE; ?></a></li>
+					<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_LOGOUT, array()); ?>"><?php echo LANG_LOGOUT; ?></a></li>
+				</ul>
+			</nav>
+			<header class="header">
+				<span class="header-logo"><?php echo CONTEXT['META']['ENGINE']; ?></span>
+			</header>

@@ -1,0 +1,110 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php
+		if(CONTEXT['SECURITY']['AUTH']::isAuthenticated() && CONTEXT['CLIENT']['LOGIN_USER']->id === CONTEXT['MEMBER']->id) {
+			include_once 'inc/leftUserAsideInc.html';
+		} else {
+			include_once 'inc/leftAsideInc.html';
+		}
+	?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+		<!-- Profile -->
+		<section class="padding10">
+			<div class="border1-gray margin-bottom10 padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <?php echo sprintf(LANG_USER_PROFILE, ucfirst(CONTEXT['MEMBER']->username)); ?></div>
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5 uppercase">
+				<b><?php echo sprintf(LANG_USER_PROFILE, ucfirst(CONTEXT['MEMBER']->username)); ?></b><b><?php echo CONTEXT['MEMBER']->account_group; ?></b>
+			</div>
+			<table class="border1-gray lgradient lgradient-white table text-left width-100">
+				<tr>
+					<td class="padding10 width-25">
+						<img alt="<?php echo CONTEXT['MEMBER']->username; ?>" class="margin-bottom10 width-100" src="<?php echo \app\file\SecureImport::getImageBase64(CONTEXT['MEMBER']->avatar); ?>" title="<?php echo CONTEXT['MEMBER']->username; ?>">
+						<div class="text-center width-100"><?php echo sprintf(LANG_REGISTERED_ON, date('d/m/Y', strtotime(CONTEXT['MEMBER']->account_creation))); ?></div>
+						<div class="text-center width-100 vmargin20">
+							<?php app\file\TemplateHtml::getUserSendRequestButton(CONTEXT['MEMBER']->id); ?>
+							<?php app\file\TemplateHtml::getUserLockOrUnlockButton(CONTEXT['MEMBER']->id); ?>
+						</div>
+					</td>
+					<td class="padding10">
+						<div class="text-center"><?php echo LANG_WITHOUT_DESCRIPTION; ?></div>
+					</td>
+				</tr>
+			</table>
+		</section>
+		<section class="flex flex-wrap flex-halign-justify padding5">
+			<!-- Game Collection -->
+			<div class="flex-4">
+				<div class="border1-gray font-11 margin5">
+					<div class="flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5"><span class="uppercase"><b><?php echo LANG_IN_MY_COLLECTION; ?></b></span><span>&#11167;</span></div>
+					<div class="lgradient lgradient-white padding5">
+						<div class="padding5 text-center">
+							<b><?php echo CONTEXT['TOTAL_GAMESINCOLLECTION']; ?></b>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Game Like -->
+			<div class="flex-4">
+				<div class="border1-gray font-11 margin5">
+					<div class="flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5"><span class="uppercase"><b><?php echo LANG_IN_MY_WISHLIST; ?></b></span><span>&#11167;</span></div>
+					<div class="lgradient lgradient-white padding5">
+						<div class="padding5 text-center">
+							<b><?php echo CONTEXT['TOTAL_GAMESINWISHLIST']; ?></b>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Mensajes -->
+			<div class="flex-4">
+				<div class="border1-gray font-11 margin5">
+					<div class="flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5"><span class="uppercase"><b><?php echo LANG_MESSAGES; ?></b></span><span>&#11167;</span></div>
+					<div class="lgradient lgradient-white padding5">
+						<div class="padding5 text-center">
+							<b><?php echo CONTEXT['TOTAL_MESSAGES']; ?></b>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Friends -->
+			<div class="flex-4">
+				<div class="border1-gray font-11 margin5">
+					<div class="flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5"><span class="uppercase"><b><?php echo LANG_FRIENDS; ?></b></span><span>&#11167;</span></div>
+					<div class="lgradient lgradient-white padding5">
+						<div class="padding5 text-center">
+							<b><?php echo CONTEXT['TOTAL_FRIENDS']; ?></b>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Forum Activity -->
+		<section class="border1-gray margin10">
+			<div class="flex flex-valign-center flex-halign-justify font-dark lgradient lgradient-gray padding5 uppercase">
+				<b>Actividad reciente en el foro</b>&#11167;
+			</div>
+			<?php
+				if(sizeof(CONTEXT['LATEST_POSTS']) > 0) {
+					foreach(CONTEXT['LATEST_POSTS'] as $row) {
+						$topicId = !empty($row->post_topic) ? $row->post_topic : $row->post_id;
+						$forumId = !empty($row->post_forum) ? $row->post_forum : $row->post_forum;
+						echo '<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify font-dark lgradient lgradient-white padding5">
+							<div>&#10070;&nbsp;<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($forumId, $topicId, 1)) . '"><b>' . $row->post_title . '</b></a> ' . LANG_IN . ' <a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOW, array($forumId, 1)) . '"><b>' . $row->forum_title . '</b></a></div> ' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->post_published)) . '
+						</div>';
+					}
+				} else {
+					echo '<div class="border-bottom1-gray flex flex-valign-center flex-halign-center font-dark lgradient lgradient-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+			<div class="border1-gray lgradient lgradient-gray padding3"></div>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

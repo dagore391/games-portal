@@ -1,0 +1,88 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTENTRY, array(1)); ?>"><?php echo LANG_ENTRIES; ?></a> &#187; <b><?php echo CONTEXT['ENTRY']->entry_title; ?> (<?php echo LANG_EDIT; ?>)</b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo CONTEXT['ENTRY']->entry_title; ?> (<?php echo LANG_EDIT; ?>)</div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_EDITENTRY, array(CONTEXT['ENTRY']->entry_id)); ?>" autocomplete="off" class="margin-bottom10" enctype="multipart/form-data" method="post" name="editentry-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="title"><b><?php echo LANG_TITLE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="title" name="title" maxlength="200" placeholder="<?php echo LANG_TITLE; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['TITLE']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="category"><b><?php echo LANG_CATEGORY; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<select class="vmargin5" id="category" name="category" required>
+							<option value=""><?php echo LANG_SELECT; ?></option>
+							<?php
+								foreach(CONTEXT['CATEGORIES'] as $key => $value) {
+									if(strtoupper($key) == strtoupper(CONTEXT['FORMDATA']['CATEGORY'])) {
+										echo '<option value="' . $key . '" selected>' . $value . '</option>';
+									} else {
+										echo '<option value="' . $key . '">' . $value . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="vmargin10 rpadding10">
+						<label class="vmargin5" for="resume"><b><?php echo LANG_RESUME; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<textarea class="vmargin5 width-100" id="resume" name="resume" placeholder="<?php echo LANG_RESUME; ?>..." maxlength="500" rows="10" required><?php echo CONTEXT['FORMDATA']['RESUME']; ?></textarea>
+					</div>
+					<div class="vmargin10 rpadding10">
+						<label class="vmargin5" for="content"><b><?php echo LANG_CONTENT; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<textarea class="vmargin5 width-100" id="content" name="content" placeholder="<?php echo LANG_CONTENT; ?>..." maxlength="65535" rows="40" required><?php echo CONTEXT['FORMDATA']['CONTENT']; ?></textarea>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="game"><b><?php echo LANG_GAME; ?></b></label><br>
+						<select class="vmargin5" id="game" name="game">
+							<option value=""><?php echo LANG_SELECT; ?></option>
+							<?php
+								foreach(CONTEXT['GAMES'] as $row) {
+									if($row->game_id == CONTEXT['FORMDATA']['GAME']) {
+										echo '<option value="' . $row->game_id . '" selected>' . $row->game_name . '</option>';
+									} else {
+										echo '<option value="' . $row->game_id . '">' . $row->game_name . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="platform"><b><?php echo LANG_PLATFORM; ?></b></label><br>
+						<select class="vmargin5" id="platform" name="platform">
+							<option value=""><?php echo LANG_SELECT; ?></option>
+							<?php
+								foreach(CONTEXT['PLATFORMS'] as $row) {
+									if($row->platform_id == CONTEXT['FORMDATA']['PLATFORM']) {
+										echo '<option value="' . $row->platform_id . '" selected>' . $row->platform_name . '</option>';
+									} else {
+										echo '<option value="' . $row->platform_id . '">' . $row->platform_name . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="score"><b><?php echo LANG_SCORE; ?></b></label><br>
+						<input class="vmargin5" id="score" name="score" type="number" value="<?php echo CONTEXT['FORMDATA']['SCORE']; ?>">
+					</div>
+					<input class="button button-red" name="game-submit" type="submit" value="<?php echo LANG_SAVE_CHANGES; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

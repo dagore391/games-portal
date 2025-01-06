@@ -1,0 +1,57 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="main ccentral-right">
+		<!-- Sign Up -->
+		<section class="padding10">
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_CREATE_ACCOUNT; ?></b>&#11167;
+			</div>
+			<div class="border1-gray lgradient lgradient-white padding10">
+				<!-- Messages -->
+				<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+				<!-- Form -->
+				<div class="text-center vpadding40">
+					<img alt="<?php echo LANG_GUEST; ?>" class="width-25 margin-bottom10" src="<?php echo \app\file\SecureImport::getImageBase64(\app\config\Paths::UMEMBER . 'no-avatar.jpg'); ?>" title="<?php echo LANG_GUEST; ?>">
+					<div class="margin-bottom20"><?php echo sprintf(LANG_WELCOME, CONTEXT['META']['NAME']); ?></div>
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_SIGNUP); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="signup-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-50">
+							<label for="username"><b><?php echo LANG_USERNAME; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="username" name="username" maxlength="20" placeholder="<?php echo LANG_USERNAME; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['USERNAME']; ?>" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-50">
+							<label for="email"><b><?php echo LANG_EMAIL; ?>&nbsp;<span class="font-red">*</span></B></label>
+							<input id="email" name="email" maxlength="64" placeholder="<?php echo LANG_EMAIL; ?>..." type="email" value="<?php echo CONTEXT['FORMDATA']['EMAIL']; ?>" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-50">
+							<label for="password1"><b><?php echo LANG_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="password1" name="password1" maxlength="24" placeholder="<?php echo LANG_PASSWORD; ?>..." type="password" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom20 padding5 width-50">
+							<label for="password2"><b><?php echo LANG_REPEAT_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="password2" name="password2" maxlength="24" placeholder="<?php echo LANG_REPEAT_PASSWORD; ?>..." type="password" required>
+						</div>
+						<div class="text-center">
+							<img alt="Captcha" src="<?php echo CONTEXT['SECURITY']['CAPTCHA']; ?>">
+						</div>
+						<div class="margin-bottom10 padding5 text-center">
+							<input name="captcha" maxlength="7" placeholder="<?php echo LANG_SECURITY_CODE; ?>" type="text" required>
+						</div>
+						<input class="button button-blue" name="login-submit" type="submit" value="<?php echo LANG_CREATE; ?>">
+					</form>
+				</div>
+			</div>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

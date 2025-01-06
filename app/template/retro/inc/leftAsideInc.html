@@ -1,0 +1,32 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	use app\data\EntryCategoriesConstants;
+?>
+<aside class="border-right-gray3 lcolumn gradient-black">
+	<!-- Left Links -->
+	<ul class="gradient-black2 font-10 menu">
+		<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_GENETAL; ?></b><span>&#11167;</span></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_INDEX; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_INDEX); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_FORUMS; ?></a></li>
+		<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_READING; ?></b><span>&#11167;</span></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::NEWS, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_NEWS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::ARTICLE, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_ARTICLES; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::REVIEW, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_REVIEWS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::PREVIEW, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_PREVIEWS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::RUMOUR, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_RUMOURS; ?></a></li>
+		<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_DATA; ?></b><span>&#11167;</span></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::PLATFORM_VIEW_LIST, array(1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_PLATFORMS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array('all', 'all', 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_GAMES; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::ENTRY_LIST_VIEW, array(EntryCategoriesConstants::FAQ, 1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_FAQS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::COMPANY_VIEW_LIST, array(1)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_COMPANIES; ?></a></li>
+		<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_TOP_GAMES; ?></b><span>&#11167;</span></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_TOP_MEDIAS); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_TOP_GAMES_MEDIAS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_TOP_USERS); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_TOP_GAMES_USERS; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::GAME_VIEW_TOP_WEB); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_TOP_GAMES_WEB; ?></a></li>
+		<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_SITE; ?></b><span>&#11167;</span></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['cookies']); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_COOKIES; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['rules']); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_RULES; ?></a></li>
+		<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['policies']); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_PRIVACY_POLICIES; ?></a></li>
+	</ul>
+</aside>

@@ -1,0 +1,143 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex flex-halign-justify">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftUserAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="main ccentral-right">
+		<!-- Update Profile -->
+		<section class="padding10" id="upreferences">
+			<div class="border1-gray margin-bottom10 padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX, array()); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <?php echo LANG_UPDATE_PREFERENCES; ?></div>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_UPDATE_PREFERENCES; ?></b>&#11167;
+			</div>
+			<div class="border1-gray lgradient lgradient-white padding10">
+				<div class="text-center vpadding40">
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_UPDATESETTINGS, array('upreferences')); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="preferencesupdate-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<label for="language"><b><?php echo LANG_SITE_LANGUAGE; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<select id="language" name="language" required>
+								<?php
+									foreach(CONTEXT['LANGUAGES'] as $row) {
+										echo '<option value="' . $row->tag . '"' . (CONTEXT['CLIENT']['LOGIN_USER']->language == $row->tag ? ' selected' : ''). '>' . $row->name . '</option>';
+									}
+								?>
+							</select>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<label for="profile"><b><?php echo LANG_WHO_CAN_VISIT_MY_PROFILE; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<select id="profile" name="profile" required>
+								<?php
+									foreach(CONTEXT['PRIVACY_TYPES'] as $key => $value) {
+										echo '<option value="' . $key . '"' . (CONTEXT['CLIENT']['LOGIN_USER']->myprofile_visivility == strtoupper($key) ? ' selected' : ''). '>' . $value . '</option>';
+									}
+								?>
+							</select>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<label for="messages"><b><?php echo LANG_WHO_CAN_PUBLISH_IN_MY_PROFILE; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<select id="messages" name="messages" required>
+								<?php
+									foreach(CONTEXT['PRIVACY_TYPES'] as $key => $value) {
+										echo '<option value="' . $key . '"' . (CONTEXT['CLIENT']['LOGIN_USER']->myprofile_publish == strtoupper($key) ? ' selected' : ''). '>' . $value . '</option>';
+									}
+								?>
+							</select>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<label for="pm"><b><?php echo LANG_WHO_CAN_SEND_ME_PM; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<select id="pm" name="pm" required>
+								<?php
+									foreach(CONTEXT['PRIVACY_TYPES'] as $key => $value) {
+										echo '<option value="' . $key . '"' . (CONTEXT['CLIENT']['LOGIN_USER']->sendme_messages == strtoupper($key) ? ' selected' : ''). '>' . $value . '</option>';
+									}
+								?>
+							</select>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom20 padding5 width-75">
+							<label for="password"><b><?php echo LANG_YOUR_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="password" name="password" maxlength="24" placeholder="<?php echo LANG_YOUR_PASSWORD; ?>..." type="password" required>
+						</div>
+						<input class="button button-blue" name="login-submit" type="submit" value="<?php echo LANG_UPDATE_PREFERENCES; ?>">
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Update Avatar -->
+		<section class="padding10">
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_UPDATE_AVATAR; ?></b>&#11167;
+			</div>
+			<div class="border1-gray lgradient lgradient-white padding10">
+				<div class="text-center vpadding40">
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_UPDATESETTINGS, array('uavatar')); ?>" autocomplete="off" class="margin-bottom10" enctype="multipart/form-data" method="post" name="avatarupdate-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<img alt="<?php echo CONTEXT['CLIENT']['LOGIN_USER']->username; ?>" class="cover-img margin10" src="<?php echo CONTEXT['CLIENT']['LOGIN_USER']->avatar; ?>">
+							<input accept="image/jpeg" class="vmargin5 width-100" id="avatar" name="avatar" type="file"><br>
+						</div>
+						<input class="button button-blue" name="login-submit" type="submit" value="<?php echo LANG_UPDATE_AVATAR; ?>">
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Update E-mail -->
+		<section class="padding10">
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_UPDATE_EMAIL; ?></b>&#11167;
+			</div>
+			<div class="border1-gray lgradient lgradient-white padding10">
+				<div class="text-center vpadding40">
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_UPDATESETTINGS, array('uemail')); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="emailupdate-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="center flex flex-valign-center flex-halign-justify padding5 width-75">
+							<label for="email"><b><?php echo LANG_EMAIL; ?>&nbsp;<span class="font-red">*</span></B></label>
+							<input id="email" name="email" maxlength="64" placeholder="<?php echo LANG_EMAIL; ?>..." type="email" value="<?php echo CONTEXT['CLIENT']['LOGIN_USER']->email; ?>" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom20 padding5 width-75">
+							<label for="ypassword"><b><?php echo LANG_YOUR_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="ypassword" name="password" maxlength="24" placeholder="<?php echo LANG_YOUR_PASSWORD; ?>..." type="password" required>
+						</div>
+						<input class="button button-blue" name="login-submit" type="submit" value="<?php echo LANG_UPDATE_EMAIL; ?>">
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Change Password -->
+		<section class="padding10">
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_CHANGE_PASSWORD; ?></b>&#11167;
+			</div>
+			<div class="border1-gray lgradient lgradient-white padding10">
+				<div class="text-center vpadding40">
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_UPDATESETTINGS, array('upassword')); ?>" autocomplete="off" class="margin-bottom10" enctype="application/x-www-form-urlencoded" method="post" name="passwordupdate-form" target="_self">
+						<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom10 padding5 width-75">
+							<label for="cpassword"><b><?php echo LANG_CURRENT_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="cpassword" name="cpassword" maxlength="24" placeholder="<?php echo LANG_CURRENT_PASSWORD; ?>..." type="password" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom10 padding5 width-75">
+							<label for="password1"><b><?php echo LANG_NEW_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="password1" name="password1" maxlength="24" placeholder="<?php echo LANG_NEW_PASSWORD; ?>..." type="password" required>
+						</div>
+						<div class="center flex flex-valign-center flex-halign-justify margin-bottom20 padding5 width-75">
+							<label for="password2"><b><?php echo LANG_REPEAT_NEW_PASSWORD; ?>&nbsp;<span class="font-red">*</span></b></label>
+							<input id="password2" name="password2" maxlength="24" placeholder="<?php echo LANG_REPEAT_NEW_PASSWORD; ?>..." type="password" required>
+						</div>
+						<input class="button button-blue" name="login-submit" type="submit" value="<?php echo LANG_CHANGE_PASSWORD; ?>">
+					</form>
+				</div>
+			</div>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

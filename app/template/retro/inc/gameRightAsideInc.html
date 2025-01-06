@@ -1,0 +1,98 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+?>
+<aside class="border-left-gray3 gradient-gray rcolumn">
+	<!-- Recent Articles -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_RATINGS; ?></b></span></div>
+		<div class="lgradient lgradient-black">
+			<div class="flex">
+				<div class="border1-blue flex-2 font-white gradient-blue text-center">
+					<div class="padding10">
+						<p class="font-12"><?php echo LANG_WEB; ?></p>
+						<p class="font-24"><b><?php echo CONTEXT['WEB_SCORE']->score; ?></b></p>
+						<p class="font-10">(<?php echo CONTEXT['WEB_SCORE']->votes . ' ' . (CONTEXT['WEB_SCORE']->votes == 1 ? LANG_REVIEWS_SINGULAR : LANG_REVIEWS_PLURAL); ?>)</p>
+					</div>
+				</div>
+				<div class="border1-black flex-2 font-white lgradient lgradient-gray2 text-center">
+					<div class="padding10">
+						<p class="font-12"><?php echo LANG_USERS; ?></p>
+						<p class="font-24"><b><?php echo CONTEXT['USERS_SCORE']->score; ?></b></p>
+						<p class="font-10">(<?php echo CONTEXT['USERS_SCORE']->votes . ' ' . (CONTEXT['USERS_SCORE']->votes == 1 ? LANG_VOTE : LANG_VOTES); ?>)</p>
+					</div>
+				</div>
+			</div>
+			<div class="flex font-11 gradient-gray2 padding10 flex-halign-center flex-valign-center">
+				<?php echo sprintf(LANG_TOP_POSITION, (CONTEXT['RATING_POSITION'] != -1 ? CONTEXT['RATING_POSITION'] : '#')); ?>
+			</div>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<?php if(CONTEXT['SECURITY']['AUTH']::isAuthenticated()) { ?>
+	<!-- Recent Releases -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_OPTIONS; ?></b></span></div>
+		<div class="gradient-gray2 padding5">
+			<div class="border-bottom1-gray2 flex flex-halign-justify padding5">
+				<span>&#11208; <?php echo LANG_MY_COLLECTION; ?></span><?php echo CONTEXT['USER_ISINCOLLECTION'] ? '<a class="link-red" href="' .Urls::getUrl(UrlsEnum::GAME_ACTION_REMOVEFROMLIST, array($platformTag, CONTEXT['GAME']->game_id, 'collection')) . '">' . LANG_REMOVE . '</a>' : '<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::GAME_ACTION_ADDTOLIST, array($platformTag, CONTEXT['GAME']->game_id, 'collection')) . '">' . LANG_ADD . '</a>'; ?>
+			</div>
+			<div class="border-bottom1-gray2 flex flex-halign-justify padding5">
+				<span>&#11208; <?php echo LANG_MY_FAVOURITES; ?></span><?php echo CONTEXT['USER_ISINFAVORITES'] ? '<a class="link-red" href="' .Urls::getUrl(UrlsEnum::GAME_ACTION_REMOVEFROMLIST, array($platformTag, CONTEXT['GAME']->game_id, 'favorite')) . '">' . LANG_REMOVE . '</a>' : '<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::GAME_ACTION_ADDTOLIST, array($platformTag, CONTEXT['GAME']->game_id, 'favorite')) . '">' . LANG_ADD . '</a>'; ?>
+			</div>
+			<div class="flex flex-halign-justify padding5">
+				<span>&#11208; <?php echo LANG_MY_WISHLIST; ?></span> <?php echo CONTEXT['USER_ISINWISHLIST'] ? '<a class="link-red" href="' .Urls::getUrl(UrlsEnum::GAME_ACTION_REMOVEFROMLIST, array($platformTag, CONTEXT['GAME']->game_id, 'wishlist')) . '">' . LANG_REMOVE . '</a>' : '<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::GAME_ACTION_ADDTOLIST, array($platformTag, CONTEXT['GAME']->game_id, 'wishlist')) . '">' . LANG_ADD . '</a>'; ?>
+			</div>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<?php } ?>
+	<!-- Recent Cheats -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_PLATFORMS; ?></b></span></div>
+		<div class="gradient-gray2 padding5">
+			<div class="flex flex-wrap">
+				<?php
+					if(sizeof(CONTEXT['GAME_PLATFORMS']) > 0) {
+						foreach(CONTEXT['GAME_PLATFORMS'] as $row) {
+							if($row->game_id == CONTEXT['GAME']->game_id) {
+								echo '<div class="flex flex-valign-center margin3">
+									<span class="flex font-11 syslabel"><span class="flex syslabel-text"><b class="font-blue">' . $row->platform_tag . '</b></span></span>
+								</div>';
+							} else {
+								echo '<div class="flex flex-valign-center margin3">
+									<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_SHOW, array($row->platform_tag, $row->game_id, 'info')) . '" title="' . $row->platform_name . '"><span class="flex syslabel-text">' . $row->platform_tag . '</span></a>
+								</div>';
+							}
+						}
+					} else {
+						echo '<div class="flex flex-valign-center margin3">
+							<span class="flex font-11 syslabel"><span class="flex syslabel-text"><b class="font-blue">' . CONTEXT['GAME']->platform_tag . '</b></span></span>
+						</div>';
+					}
+				?>
+			</div>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<!-- Related Games -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_OTHER_GAMES; ?></b></span></div>
+		<div class="gradient-gray2 padding5">
+			<?php
+				$totalSimilarGames = sizeof(CONTEXT['SIMILAR_GAMES']);
+				if($totalSimilarGames > 0) {
+					$idx = 1;
+					foreach(CONTEXT['SIMILAR_GAMES'] as $game) {
+						echo '<div class="' . ($idx++ < $totalSimilarGames ? 'border-bottom1-gray2 ' : '') . 'flex flex-halign-justify vpadding5">
+							<span><a class="link-blue" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_SHOW, array($game->platform_tag, $game->game_id, 'info')) . '">' . $game->game_name . '</a></span>
+						</div>';
+					}
+				} else {
+					echo '<div class="padding5 text-center">' . LANG_NO_SUGGESTIONS . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+</aside>

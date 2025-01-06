@@ -1,0 +1,28 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	use app\file\TemplateHtml;
+?>
+			<!--COOKIES ALERT-->
+			<?php TemplateHtml::showCookiesAlert(); ?>
+			<footer class="font-11">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-black vpadding40">
+					<div class="flex flex-halign-center lcolumn">
+						<a class="font-16 font-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo CONTEXT['META']['NAME']; ?></a>
+					</div>
+					<div class="flex flex-halign-center">
+						<a class="link-gray margin10" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a>
+						<?php echo '<a class="link-gray margin10" href="mailto:' . CONTEXT['META']['EMAIL'] . '">' . LANG_CONTACT . '</a>'; ?>
+						<a class="link-gray margin10" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['cookies']); ?>"><?php echo LANG_COOKIES; ?></a>
+						<a class="link-gray margin10" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['rules']); ?>"><?php echo LANG_RULES; ?></a>
+						<a class="link-gray margin10" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_CUSTOM_PAGE, ['policies']); ?>"><?php echo LANG_PRIVACY_POLICIES; ?></a>
+					</div>
+					<div class="flex flex-halign-center font-white rcolumn"><div><p><b><?php echo LANG_GENERATION_TIME; ?>:</b></p><p><?php echo CONTEXT['PAGE']['GENERATION_TIME']; ?> <?php echo LANG_SECONDS; ?></p></div></div>
+				</div>
+				<div class="bg-black flex flex-valign-center flex-halign-center font-white vpadding5">
+					<?php echo CONTEXT['META']['COPYRIGHT_MESSAGE']; ?>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

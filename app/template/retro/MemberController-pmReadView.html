@@ -1,0 +1,36 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftUserAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+		<!-- Private Message -->
+		<section class="padding10">
+			<div class="border1-gray margin-bottom10 padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX, array()); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_INBOXPM, array()); ?>"><b><?php echo LANG_INBOX; ?></b></a> / <?php echo LANG_MESSAGE . ' "' . CONTEXT['PRIVATE_MESSAGE']->subject . '"'; ?></div>
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo CONTEXT['PRIVATE_MESSAGE']->subject; ?></b>&#11167;
+			</div>
+			<div class="border1-gray">
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify gradient-gray">
+					<div class="padding10"><?php echo LANG_FROM; ?>: <b><?php echo CONTEXT['PRIVATE_MESSAGE']->username; ?></b></div>
+					<div class="padding10"><?php echo date('d/m/Y H:i', strtotime(CONTEXT['PRIVATE_MESSAGE']->send_date)); ?></div>
+				</div>
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-white">
+					<div class="font-11 padding10"><?php echo CONTEXT['PRIVATE_MESSAGE']->message; ?></div>
+				</div>
+				<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify gradient-gray">
+					<div class="font-11 padding10">&nbsp;</div>
+					<a class="button button-orange hmargin5" href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_INBOXPM, array()); ?>">&#129144; <?php echo LANG_GO_TO_INBOX; ?></a>
+				</div>
+			</div>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

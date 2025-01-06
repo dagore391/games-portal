@@ -1,0 +1,21 @@
+<aside class="border-left-gray3 gradient-gray rcolumn">
+	<!-- Entry Info -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_DETAILS; ?></b></span></div>
+		<div class="padding5">
+			<div class="flex flex-halign-center flex-valign-start">
+				<img alt="<?php echo CONTEXT['ENTRY']->entry_title; ?>" class="cover-img2 margin10" src="<?php echo CONTEXT['ENTRY']->entry_thumbnail; ?>" title="<?php echo CONTEXT['ENTRY']->entry_title; ?>">
+			</div>
+			<div class="border-bottom1-gray2 flex flex-halign-justify padding5">
+				<b><?php echo LANG_DATE; ?></b><span class="font-gray7"><?php echo date(LANGCONFIG_DATE_FORMAT, strtotime(CONTEXT['ENTRY']->entry_published)); ?></span>
+			</div>
+			<div class="border-bottom1-gray2 flex flex-halign-justify padding5">
+				<b><?php echo LANG_TYPE; ?></b><span class="font-gray7"><?php echo CONTEXT['ENTRY_CATEGORY_NAME']; ?></span>
+			</div>
+			<div class="flex flex-halign-justify padding5">
+				<b><?php echo LANG_AUTHOR; ?></b><span class="font-gray7"><?php echo CONTEXT['ENTRY']->member_username; ?></span>
+			</div>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+</aside>

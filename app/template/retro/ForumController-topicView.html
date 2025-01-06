@@ -1,0 +1,109 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<!-- Content -->
+	<main class="main wrap">
+		<div class="padding10">
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+		</div>
+		<!-- Topic -->
+		<section class="padding10">
+			<?php
+				$topicForumId = CONTEXT['TOPIC']->forum_id;
+				$topicAuthorId = CONTEXT['TOPIC']->member_id; 
+			?>
+			<div class="border1-gray padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_INDEX); ?>"><b><?php echo LANG_FORUMS; ?></b></a> / <a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOW, array($topicForumId, 1)); ?>"><b><?php echo CONTEXT['TOPIC']->forum_title; ?></b></a> / <?php echo CONTEXT['TOPIC']->topic_title; ?></div>
+			<table class="table vmargin10 text-left width-100">
+				<tr class="border1-blue font-white lgradient lgradient-blue text-center uppercase">
+					<th class="padding10" colspan="2"><?php echo CONTEXT['TOPIC']->topic_title; ?></th>
+				</tr>
+				<tr class="border1-gray bg-white font-dark">
+					<td class="valign-top" width="20%">
+						<div class="border1-gray lgradient lgradient-white margin10 padding5 text-center uppercase"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($topicAuthorId)); ?>"><b><?php echo CONTEXT['TOPIC']->member_username; ?></b></a></div>
+						<div class="hmargin10 text-center"><img alt="<?php echo CONTEXT['TOPIC']->member_account_group; ?>" class="border1-gray3 topic-avatar" src="<?php echo CONTEXT['TOPIC']->member_avatar; ?>" title="<?php echo CONTEXT['TOPIC']->member_username; ?>"></div>
+						<div class="margin10 text-center uppercase">
+							<b><?php echo CONTEXT['TOPIC']->member_account_group; ?></b>
+						</div>
+					</td>
+					<td class="padding10 valign-top" width="80%"><?php echo CONTEXT['TOPIC']->topic_content; ?></td>
+				</tr>
+				<tr class="border1-gray bg-white">
+					<td class="border1-gray lgradient lgradient-white padding10 margin-bottom10" colspan="2">
+						<div class="flex flex-halign-justify">
+							<span>&#128197;&nbsp;<?php echo date(LANGCONFIG_DATEHOUR_FORMAT, strtotime(CONTEXT['TOPIC']->topic_published)); ?></span>
+							<div>
+								<?php app\file\TemplateHtml::getUserReportPostButton($topicAuthorId, strtolower(app\data\ReportTypesConstants::TYPE_POST), CONTEXT['TOPIC']->topic_id); ?>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<?php
+					if(sizeof(CONTEXT['TOPIC_POSTS']) > 0) {
+						foreach(CONTEXT['TOPIC_POSTS'] as $row) {
+							echo '<tr class="border1-gray bg-white">
+								<td class="lgradient lgradient-gray padding5" colspan="2"></td>
+							</tr>
+							<tr class="border1-gray bg-white font-dark">
+								<td class="valign-top">
+									<div class="border1-gray lgradient lgradient-white margin10 padding5 text-center uppercase"><a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($row->member_id)) . '"><b>' . $row->member_username . '</b></a></div>
+									 <div class="hmargin10 text-center"><img alt="' . $row->member_username . '" class="border1-gray3 topic-avatar" src="' . $row->member_avatar . '" title="' . $row->member_username . '"></div>
+									 <div class="margin10 text-center uppercase">
+										<b>' . $row->member_account_group . '</b>
+									</div>
+								</td>
+								<td class="padding10 valign-top">
+									<p class="border1-gray lgradient lgradient-white padding5 margin-bottom10"><b>' . $row->post_title . '</b></p>
+									<div class="padding5">' . $row->post_content . '</div>
+								</td>
+							</tr>
+							<tr class="border1-gray bg-white">
+								<td class="border1-gray lgradient lgradient-white padding10 margin-bottom10" colspan="2">
+									<div class="flex flex-halign-justify flex-valign-center">
+										<span>&#128197;&nbsp;' . date(LANGCONFIG_DATEHOUR_FORMAT, strtotime($row->post_published)) . '</span>
+										<div>';
+											app\file\TemplateHtml::getUserReportPostButton($row->member_id, strtolower(app\data\ReportTypesConstants::TYPE_POST), $row->post_id);
+											echo '&nbsp;';
+										echo '</div>
+									</div>
+								</td>
+							</tr>';
+						}
+					}
+				?>
+				<tr class="border1-gray bg-white">
+					<td class="lgradient lgradient-gray padding5" colspan="2"></td>
+				</tr>
+			</table>
+			<br>
+			<div class="border1-blue font-white lgradient lgradient-blue text-center uppercase">
+				<div class="padding10"><?php echo LANG_REPLY; ?></div>
+			</div>
+			<?php if(CONTEXT['TOPIC']->topic_is_closed) { 
+				echo '<div class="border1-gray bg-white padding10 text-center">' . LANG_CLOSED_TOPIC . '</div>';
+			} else { ?>
+			<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::FORUM_ACTION_NEWPOST, array(CONTEXT['TOPIC']->forum_id, CONTEXT['TOPIC']->topic_id)); ?>" autocomplete="off" class="margin-bottom10 padding10" enctype="application/x-www-form-urlencoded" method="post" name="newpost-form" target="_self">
+				<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+				
+				<div class="vmargin10 rpadding10">
+					<textarea class="vmargin5 width-100" id="content" name="content" placeholder="<?php echo LANG_CONTENT; ?>..." rows="15" required><?php echo CONTEXT['FORMDATA']['CONTENT']; ?></textarea>
+				</div>
+				<div class="text-right">
+					<input class="button button-blue" name="post-submit" type="submit" value="<?php echo LANG_REPLY; ?>">
+				</div>
+			</form>
+			<?php } ?>
+			<!-- Forum Pagination -->
+			<section class="margin-bottom10 padding10">
+				<?php echo CONTEXT['PAGINATION']; ?>
+			</section>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

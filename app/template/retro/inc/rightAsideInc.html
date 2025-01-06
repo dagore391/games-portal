@@ -1,0 +1,64 @@
+<?php
+	use app\config\Urls;
+	use app\data\EntryCategoriesConstants;
+	use app\data\UrlsEnum;
+?>
+<aside class="border-left-gray3 gradient-gray rcolumn">
+	<!-- Recent Releases -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_GAMES_RELEASES; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				$gameReleases = app\model\GameModel::selectLatestReleases(7);
+				if(sizeof($gameReleases) > 0) {
+					foreach($gameReleases as $row) {
+						echo '<div class="flex flex-valign-center font-white padding2">
+							<a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '"><span class="flex syslabel-text" title="' . $row->platform_name . '">' . strtoupper($row->platform_tag) . '</span></a>&nbsp;<a class="link-blue padding2" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_SHOW, array($row->platform_tag, $row->game_id, 'info')) . '" title="' . $row->game_name . ' (' . $row->platform_name . ')">' . (strlen($row->game_name) > 24 ? substr($row->game_name, 0, 24) . '...' : $row->game_name) . '</a>
+						</div>';
+					}
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<!-- Recent Faqs -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_FAQS; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				$latestFaqs = app\model\EntryModel::getLimitByCategory(EntryCategoriesConstants::FAQ, 0, 7);
+				if(sizeof($latestFaqs) > 0) {
+					foreach($latestFaqs as $row) {
+						echo '<div class="font-white padding5">
+							<span>' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->entry_published)) . '</span>&nbsp;<span class="font-white">&#11208;</span>&nbsp;<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::ENTRY_VIEW_SHOW, array(EntryCategoriesConstants::FAQ, $row->entry_id, 1)) . '">' . (strlen($row->entry_title) > 21 ? trim(substr($row->entry_title, 0, 21)) . '...' : $row->entry_title) . '</a>
+						</div>';
+					}
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+	<!-- Recent Cheats -->
+	<div class="font-11">
+		<div class="flex flex-valign-center flex-halign-justify lgradient lgradient-gray border1-gray padding10"><span>&#11167;</span><span class="uppercase"><b><?php echo LANG_CHEATS; ?></b></span></div>
+		<div class="lgradient lgradient-black padding5">
+			<?php
+				$latestCheats = app\model\CheatModel::getLimit(0, 7);
+				if(sizeof($latestCheats) > 0) {
+					foreach($latestCheats as $row) {
+						echo '<div class="font-white padding5">
+							<span>' . date(LANGCONFIG_DATE_FORMAT, strtotime($row->cheat_published)) . '</span>&nbsp;<span class="font-white">&#11208;</span>&nbsp;<span class="link-blue">' . (strlen($row->cheat_title) > 21 ? trim(substr($row->cheat_title, 0, 21)) . '...' : $row->cheat_title) . '</span>
+						</div>';
+					}
+				} else {
+					echo '<div class="flex flex-halign-center font-white padding5">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</div>
+		<div class="lgradient lgradient-white ra-box-footer"></div>
+	</div>
+</aside>

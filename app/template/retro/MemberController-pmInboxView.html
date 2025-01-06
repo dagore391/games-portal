@@ -1,0 +1,73 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftUserAsideInc.html'; ?>
+	<!-- Content -->
+	<main class="ccentral-right main">
+		<!-- Inbox -->
+		<section class="padding10" id="uinbox">
+			<div class="border1-gray margin-bottom10 padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <?php echo LANG_INBOX; ?></div>
+			<div class="border1-blue flex flex-valign-center flex-halign-justify font-white lgradient lgradient-blue padding5">
+				<b class="uppercase"><?php echo LANG_INBOX; ?></b>&#11167;
+			</div>
+			<div class="border1-gray">
+				<div class="border-bottom1-gray lgradient lgradient-white padding10">
+					<div class="info padding10"><?php echo sprintf(LANG_INBOX_HELP, Urls::getUrl(UrlsEnum::MEMBER_VIEW_SETTINGS, array())); ?></div>
+				</div>
+				<div class="padding10">
+					<!-- Messages -->
+					<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+				</div>
+				<div class="border-bottom1-gray gradient-gray text-center">
+					<?php
+						if(CONTEXT['CLIENT']['LOGIN_USER_TOTAL_UNREAD_PM'] == 1) {
+							echo '<div class="padding10 uppercase"><b>' . LANG_ONE_UNREAD_MESSAGE . '</b></div>';
+						} else {
+							echo '<div class="padding10 uppercase"><b>' . sprintf(LANG_MULTI_UNREAD_MESSAGE, CONTEXT['CLIENT']['LOGIN_USER_TOTAL_UNREAD_PM']) . '</b></div>';
+						}
+					?>
+				</div>
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_PROCESSPM); ?>#uinbox" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post" name="processpm-form" onsubmit="return confirm('<?php echo LANG_DELETE_SELECTED_QUESTION; ?>');" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<?php
+						if(sizeof(CONTEXT['INBOX_MESSAGES']) > 0) {
+							foreach(CONTEXT['INBOX_MESSAGES'] as $row) {
+								if($row->is_read === 1) {
+									echo '<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-white">
+										<div class="font-11 padding10"><b>&#9993;</b><label>&nbsp;&#11208;&nbsp;<label><a class="link-black" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_SHOWPM, array($row->message_id)) . '">' . $row->subject . '</a></label></div>
+										<label class="flex flex-valign-center font-10 font-gray9 uppercase">
+											<label for="message' . $row->message_id . '"><b>' . $row->username . '</b></label>
+											<input class="margin10" id="message' . $row->message_id . '" name="messages[]" type="checkbox" value="' . $row->message_id . '">
+										</label>
+									</div>';
+								} else {
+									echo '<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify lgradient lgradient-white">
+										<div class="font-11 font-blue padding10"><b>&#9993;</b><label>&nbsp;&#11208;&nbsp;<label><a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_SHOWPM, array($row->message_id)) . '">' . $row->subject . '</a></label></div>
+										<label class="flex flex-valign-center font-10 font-gray9 uppercase">
+											<label for="message' . $row->message_id . '"><b>' . $row->username . '</b></label>
+											<input class="margin10" id="message' . $row->message_id . '" name="messages[]" type="checkbox" value="' . $row->message_id . '">
+										</label>
+									</div>';
+								}
+							}
+						} else {
+							echo '<div class="margin20 text-center">' . LANG_NO_RESULTS_FOUND . '</div>';
+						}
+					?>
+					<div class="border-bottom1-gray flex flex-valign-center flex-halign-justify gradient-gray">
+						<div class="font-11 padding10"><b class="uppercase"><?php echo LANG_MESSAGES; ?>:</b>&nbsp;<?php echo sizeof(CONTEXT['INBOX_MESSAGES']) . '/' . CONTEXT['CLIENT']['LOGIN_USER']->inbox_max; ?></div>
+						<?php echo '<input class="button button-orange hmargin5" type="submit" value="' .  LANG_DELETE_SELECTED . '"' . (sizeof(CONTEXT['INBOX_MESSAGES']) === 0 ? ' disabled' : '') . '>'; ?>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

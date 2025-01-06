@@ -1,0 +1,80 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTGAME, array(1)); ?>"><?php echo LANG_GAMES; ?></a> &#187; <b><?php echo CONTEXT['GAME']->game_name; ?> (<?php echo LANG_EDIT; ?>)</b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo CONTEXT['GAME']->game_name; ?> (<?php echo LANG_EDIT; ?>)</div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_EDITGAME, array(CONTEXT['GAME']->game_id)); ?>" autocomplete="off" class="margin-bottom10" enctype="multipart/form-data" method="post" name="editgame-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="name"><b><?php echo LANG_NAME; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5 width-100" id="name" name="name" maxlength="128" placeholder="<?php echo LANG_NAME; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['NAME']; ?>" required>
+					</div>
+					<div class="vmargin10 rpadding10">
+						<label class="vmargin5" for="resume"><b><?php echo LANG_DESCRIPTION; ?></b></label><br>
+						<textarea class="vmargin5 width-100" id="resume" name="resume" placeholder="<?php echo LANG_DESCRIPTION; ?>..." maxlength="65535" rows="15"><?php echo CONTEXT['FORMDATA']['RESUME']; ?></textarea>
+					</div>
+					<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+						<div class="vmargin5 rpadding10">
+							<label class="vmargin5" for="platform"><b><?php echo LANG_PLATFORM; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+							<select class="vmargin5 width-100" id="platform" name="platform" required>
+								<option value=""><?php echo LANG_SELECT; ?></option>
+								<?php
+									foreach(CONTEXT['PLATFORMS'] as $row) {
+										if(CONTEXT['FORMDATA']['PLATFORM'] == $row->platform_id) {
+											echo '<option value="' . $row->platform_id . '" selected>' . $row->platform_name . '</option>';
+										} else {
+											echo '<option value="' . $row->platform_id . '">' . $row->platform_name . '</option>';
+										}
+									}
+								?>
+							</select><br>
+							<label class="vmargin5" for="group"><b><?php echo LANG_GROUP; ?></b></label><br>
+							<input class="vmargin5 width-50" id="group" name="group" type="number" value="<?php echo CONTEXT['FORMDATA']['GROUP']; ?>">
+						</div>
+						<div class="vmargin5 rpadding10">
+							<label class="vmargin5" for="release-year"><b><?php echo LANG_DAY . '/' . LANG_MONTH . '/' . LANG_YEAR; ?></b></label><br>
+							<input class="vmargin5" id="release-day" name="release-day" type="number" placeholder="<?php echo LANG_DAY; ?>" value="<?php echo CONTEXT['FORMDATA']['RELEASE_DAY']; ?>">&nbsp;/&nbsp;<input class="vmargin5" id="release-month" name="release-month" type="number" placeholder="<?php echo LANG_MONTH; ?>" value="<?php echo CONTEXT['FORMDATA']['RELEASE_MONTH']; ?>">&nbsp;/&nbsp;<input class="vmargin5" id="release-year" name="release-year" type="number" placeholder="<?php echo LANG_YEAR; ?>" value="<?php echo CONTEXT['FORMDATA']['RELEASE_YEAR']; ?>"><br>
+							<label class="vmargin5" for="release-price"><b><?php echo LANG_RELEASE_PRICE; ?></b></label><br>
+							<input class="vmargin5 width-100" id="release-price" name="release-price" placeholder="<?php echo LANG_RELEASE_PRICE; ?>..." maxlength="16" type="text"value="<?php echo CONTEXT['FORMDATA']['RELEASE_PRICE']; ?>">
+						</div>
+					</div>
+					<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+						<div class="vmargin5 rpadding10">
+							<label class="vmargin5" for="cover"><b><?php echo LANG_IMAGE; ?></b></label><br>
+							<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+							<?php
+								$picture = app\config\Paths::UGAMECOVER . CONTEXT['GAME']->platform_tag . DIRECTORY_SEPARATOR . CONTEXT['GAME']->game_id . '.jpg';
+								if(file_exists($picture)) {
+									echo '<img alt="' . CONTEXT['GAME']->game_name . '" class="hmarginright10 thumbnail" src="' . app\file\SecureImport::getImageBase64($picture) . '">';
+								}
+							?>
+							<input accept="image/jpeg" class="vmargin5 width-100" id="cover" name="cover" type="file"><br>
+							</div>
+						</div>
+					</div>
+					<?php app\data\Input::htmlMultiselect('developers', LANG_DEVELOPER, CONTEXT['COMPANIES'], CONTEXT['FORMDATA']['DEVELOPERS'], 5, false); ?>
+					<?php app\data\Input::htmlMultiselect('publishers', LANG_PUBLISHER, CONTEXT['COMPANIES'], CONTEXT['FORMDATA']['PUBLISHERS'], 5, false); ?>
+					<?php app\data\Input::htmlMultiselect('metadata', LANG_METADATA, CONTEXT['METADATA'], CONTEXT['FORMDATA']['METADATA'], 10, true); ?>
+					<input class="button button-red" name="game-submit" onclick="$('#developers option').prop('selected', true); $('#publishers option').prop('selected', true); $('#metadata option').prop('selected', true);" type="submit" value="<?php echo LANG_SAVE_CHANGES; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Scripts -->
+<script src="<?php echo \app\file\SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'js/jquery.min.js'); ?>" type="application/javascript"></script>
+<script src="<?php echo \app\file\SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'js/input.js'); ?>" type="application/javascript"></script>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

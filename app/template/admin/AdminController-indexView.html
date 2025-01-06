@@ -1,0 +1,39 @@
+<!-- Header -->
+<?php include_once 'inc/headerInc.html'; ?>
+<div class="navigation"><?php echo LANG_INDEX; ?></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<div class="block-header"><?php echo LANG_DASHBOARD; ?></div>
+			<div class="content">Welcome to the admin panel. You can check the admin log by clicking the following link: Admin Log.</div>
+			<fieldset>
+				<legend>Alerts</legend>
+				<div>
+					There are <b>1</b> problems present with your installation:<br /><br />
+					<b>Warning:</b> Security risk! remove install.php.<br />
+				</div>
+			</fieldset>
+		</section>
+		<div class="padding10"></div>
+		<section>
+			<ul class="left-links">
+				<li class="block-header vmargin5">User reports</li>
+				<li><b>&#187;</b>&nbsp;<a href="#">Mensaje 1</a></li>
+			</ul>
+		</section>
+		<div class="padding10"></div>
+		<section>
+			<ul class="left-links">
+				<li class="block-header vmargin5">Stats</li>
+				<li><b>&#187;</b>&nbsp;<?php echo LANG_REGISTERED_USERS; ?>:&nbsp;<b><?php echo CONTEXT['STATS']['REGISTERED_USERS']; ?></b></li>
+				<li><b>&#187;</b>&nbsp;<?php echo LANG_USERS_ONLINE; ?>:&nbsp;<b><?php echo CONTEXT['STATS']['ONLINE_USERS']; ?></b></li>
+				<li><b>&#187;</b>&nbsp;<?php echo LANG_VISITS; ?>:&nbsp;<b><?php echo CONTEXT['STATS']['VISITS']; ?></b></li>
+				<li><b>&#187;</b>&nbsp;<?php echo LANG_UNIQUE_VISITS; ?>:&nbsp;<b><?php echo CONTEXT['STATS']['UNIQUE_VISITS']; ?></b></li>
+			</ul>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

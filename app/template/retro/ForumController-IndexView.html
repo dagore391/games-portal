@@ -1,0 +1,50 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<!-- Body -->
+<section class="flex">
+	<!-- Content -->
+	<main class="main ccentral-left">
+		<!-- Forum -->
+		<section class="padding10">
+			<div class="border1-gray margin-bottom10 padding5"><a class="link-blue" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo LANG_INDEX; ?></b></a> / <?php echo LANG_FORUMS; ?></div>
+			<?php
+				if(sizeof(CONTEXT['FORUM']) > 0) {
+					foreach(CONTEXT['FORUM'] as $forumCategory) {
+						echo '<table class="table margin-bottom20 text-left width-100">
+							<tr class="border1-blue font-white lgradient lgradient-blue">
+								<th class="padding10" width="55%">' . $forumCategory['title'] . '</th>
+								<th class="padding10">' . LANG_MESSAGES . '</th>
+								<th class="padding10" width="30%">' . LANG_LAST_REPLY . '</th>
+							</tr>';
+						if(sizeof($forumCategory['forums']) > 0) {
+							foreach($forumCategory['forums'] as $singleForum) {
+								echo '<tr class="border1-gray bg-white">
+									<td class="padding10">
+										<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOW, array($singleForum['id'], 1)) . '"><b>' . $singleForum['title'] . '</b></a>
+										<p>' . $singleForum['description'] . '</p>
+									</td>
+									<td class="padding10">' . sizeof($singleForum['posts']) . '</td>
+									<td class="padding10">' . (!is_null($singleForum['last_post']) ? '<a class="link-blue" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($singleForum['last_post']->member_id)) . '"><b>' . $singleForum['last_post']->member_username . '</b></a> en <a class="link-blue" href="' . Urls::getUrl(UrlsEnum::FORUM_VIEW_SHOWTOPIC, array($singleForum['id'], $singleForum['last_post']->post_topic, 1)) . '"><b>' . $singleForum['last_post']->post_title . '</b></a>' : LANG_NO_RESULTS_FOUND) . '</td>
+								</tr>';
+							}
+						}
+						echo '<tr class="border1-gray bg-white">
+								<td class="lgradient lgradient-gray padding5" colspan="3"></td>
+							</tr>
+						</table>';
+					}
+				} else {
+					echo '<div class="margin20 text-center">' . LANG_NO_RESULTS_FOUND . '</div>';
+				}
+			?>
+		</section>
+	</main>
+	<!-- Right Aside -->
+	<?php include_once 'inc/forumRightAsideInc.html'; ?>
+</section>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>

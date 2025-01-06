@@ -1,0 +1,20 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	if(CONTEXT['SECURITY']['AUTH']::isAuthenticated()) { ?>
+	<aside class="border-right-gray3 lcolumn gradient-black">
+		<?php $id = CONTEXT['CLIENT']['LOGIN_USER']->id; ?>
+		<!-- Left Links -->
+		<ul class="gradient-black2 font-10 menu">
+			<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_GENETAL; ?></b><span>&#11167;</span></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_INDEX; ?></a></li>
+			<li class="flex flex-valign-center flex-halign-justify font-11 lgradient lgradient-gray border1-gray padding10"><b><?php echo LANG_MY_ACCOUNT; ?></b><span>&#11167;</span></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($id)); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_MY_PROFILE; ?></a></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_FRIENDS); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_MY_FRIENDS; ?></a></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_REQUESTS); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_REQUESTS; ?></a></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_INBOXPM); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_MESSAGES; ?></a></li>
+			<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_SETTINGS); ?>">&#11169;&nbsp;&nbsp;<?php echo LANG_SETTINGS; ?></a></li>
+		</ul>
+	</aside>
+<?php } ?>

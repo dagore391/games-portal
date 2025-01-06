@@ -1,0 +1,76 @@
+<?php
+	use  app\config\Urls;
+	use  app\data\UrlsEnum;
+?>
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="<?php echo CONTEXT['META']['CHARSET']; ?>">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="<?php echo \app\file\SecureImport::getFileBase64(CONTEXT['TEMPLATE_DIR']['ROOT'] . 'css/default.css'); ?>" rel="stylesheet" type="text/css">
+		<title><?php echo CONTEXT['META']['NAME']; ?></title>
+	</head>
+	<body>
+		<!-- Site Wrap -->
+		<div class="wrap">
+			<!-- Navigation -->
+			<nav class="lgradient lgradient-gray border1-gray">
+				<div class="flex flex-valign-center flex-halign-justify lgradient-grayt padding10">
+					<!-- Search Form -->
+					<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_SEARCH); ?>" autocomplete="off" enctype="application/x-www-form-urlencoded" method="post" name="headersearch-form" target="_self">
+						<label class="font-gray4" for="hsearch-text"><b><?php echo LANG_SEARCHER; ?></b></label>&nbsp;
+						<input id="hsearch-text" maxlength="50" name="hsearch-text"  placeholder="<?php echo LANG_SEARCH_PLACEHOLDER; ?>" type="text" required>&nbsp;
+						<input class="button button-blue" type="submit" value="<?php echo LANG_SEARCH; ?>">
+					</form>
+					<!-- Top Links -->
+					<ul class="flex menu">
+						<?php
+							foreach(app\model\PlatformModel::getFeaturedPlatforms() as $row) {
+								echo '<li><a class="flex font-11 syslabel-link syslabel" href="' . Urls::getUrl(UrlsEnum::GAME_VIEW_LIST, array($row->platform_tag, 'all', 1)) . '" title="' . $row->platform_name . '"><span class="flex syslabel-text"><b>' . $row->platform_tag . '</b></span></a></li>';
+							}
+						?>
+					</ul>
+				</div>
+			</nav>
+			<!-- Header -->
+			<header class="flex flex-valign-center flex-halign-justify gradient-blue">
+				<!-- Site Logo -->
+				<a class="font-24 font-white logo" href="<?php echo Urls::getUrl(UrlsEnum::INIT_VIEW_INDEX); ?>"><b><?php echo CONTEXT['META']['NAME']; ?></b></a>
+				<!-- Header User Box -->
+				<section class="bg-blue1 hpadding2">
+					<?php if(!CONTEXT['SECURITY']['AUTH']::isAuthenticated()) { ?>
+					<div class="lgradient lgradient-blue">
+						<div class="flex flex-halign-center lgradient-bluet">
+							<div class="hwelcome padding10"><?php echo sprintf(LANG_WELCOME, CONTEXT['META']['NAME']); ?></div>
+						</div>
+					</div>
+					<ul class="flex flex-halign-center hlinks menu">
+						<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_LOGIN); ?>"><?php echo LANG_LOGIN; ?></a></li>
+						<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_SIGNUP); ?>"><?php echo LANG_CREATE_ACCOUNT; ?></a></li>
+					</ul>
+					<?php } else { ?>
+					<div class="lgradient lgradient-blue">
+						<div class="flex flex-halign-center lgradient-bluet">
+							<div class="hwelcome padding10">
+								<?php $id = CONTEXT['CLIENT']['LOGIN_USER']->id; ?>
+								<?php echo sprintf(LANG_USER_WELCOME, '<a class="link-black" href="' . Urls::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($id)) . '">' . CONTEXT['CLIENT']['LOGIN_USER']->username . '</a>'); ?>
+							</div>
+						</div>
+					</div>
+					<ul class="flex flex-halign-center hlinks menu">
+						<?php if(CONTEXT['SECURITY']['AUTH']::isAdmin() || CONTEXT['SECURITY']['AUTH']::isManager()) { ?>
+						<li><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>" target="_blank"><?php echo LANG_ADMIN_PANEL; ?></a></li>
+						<?php } ?>
+						<li><a href="<?php echo URLS::getUrl(UrlsEnum::MEMBER_VIEW_PROFILE, array($id)); ?>"><?php echo LANG_MY_ACCOUNT; ?></a></li>
+						<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_VIEW_INBOXPM); ?>"><?php echo LANG_MESSAGES; ?> (<?php echo CONTEXT['CLIENT']['LOGIN_USER_TOTAL_UNREAD_PM']; ?>)</a></li>
+						<li><a href="<?php echo Urls::getUrl(UrlsEnum::MEMBER_ACTION_LOGOUT, array()); ?>"><?php echo LANG_LOGOUT; ?></a></li>
+					</ul>
+					<?php } ?>
+				</section>
+			</header>
+			<!-- Advert -->
+			<section class="lgradient lgradient-gray2">
+				<div class="flex flex-valign-center flex-halign-justify lgradient-grayt2 padding10">
+					<div class="hadvert padding10"><span class="font-white uppercase"><?php echo LANG_ADVERTISING; ?></span></div>
+				</div>
+			</section>

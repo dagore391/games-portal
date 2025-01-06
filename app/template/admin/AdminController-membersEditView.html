@@ -1,0 +1,77 @@
+<?php
+	use app\config\Urls;
+	use app\data\UrlsEnum;
+	
+	include_once 'inc/headerInc.html';
+?>
+<div class="navigation"><a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_INDEX); ?>"><?php echo LANG_INDEX; ?></a> &#187; <a href="<?php echo Urls::getUrl(UrlsEnum::ADMIN_VIEW_LISTMEMBER, array(1)); ?>"><?php echo LANG_USERS; ?></a> &#187; <b><?php echo CONTEXT['MEMBER']->username; ?> (<?php echo LANG_EDIT; ?>)</b></div>
+<div class="body">
+	<!-- Left Aside -->
+	<?php include_once 'inc/leftAsideInc.html'; ?>
+	<main class="main">
+		<section>
+			<!-- Messages -->
+			<?php echo CONTEXT['MESSAGES']['HTML_BOX']; ?>
+			<!-- Form -->
+			<div class="block-header"><?php echo CONTEXT['MEMBER']->username; ?> (<?php echo LANG_EDIT; ?>)</div>
+			<div class="content">
+				<form accept-charset="utf-8" action="<?php echo Urls::getUrl(UrlsEnum::ADMIN_ACTION_EDITMEMBER, array(CONTEXT['MEMBER']->id)); ?>" autocomplete="off" class="margin-bottom10" enctype="multipart/form-data" method="post" name="edituser-form" target="_self">
+					<input name="token" type="hidden" value="<?php echo CONTEXT['SECURITY']['TOKEN']; ?>">
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="inbox_max"><b><?php echo LANG_INBOX_SIZE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5" id="inbox_max" name="inbox_max" placeholder="<?php echo LANG_INBOX_SIZE; ?>..." type="number" value="<?php echo CONTEXT['FORMDATA']['INBOX_MAX']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="email"><b><?php echo LANG_EMAIL; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<input class="vmargin5" id="email" name="email" maxlength="100" placeholder="<?php echo LANG_EMAIL; ?>..." type="text" value="<?php echo CONTEXT['FORMDATA']['EMAIL']; ?>" required>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="account_group"><b><?php echo LANG_GROUP; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<select class="vmargin5" id="account_group" name="account_group" required>
+							<?php
+								foreach(CONTEXT['ACCOUNT_GROUPS'] as $key => $value) {
+									if($key == CONTEXT['FORMDATA']['ACCOUNT_GROUP']) {
+										echo '<option value="' . $key . '" selected>' . $value . '</option>';
+									} else {
+										echo '<option value="' . $key . '">' . $value . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="vmargin5 rpadding10">
+						<label class="vmargin5" for="account_state"><b><?php echo LANG_STATE; ?>&nbsp;<span class="font-red">*</span></b></label><br>
+						<select class="vmargin5" id="account_state" name="account_state" required>
+							<?php
+								foreach(CONTEXT['ACCOUNT_STATES'] as $key => $value) {
+									if($key == CONTEXT['FORMDATA']['ACCOUNT_STATE']) {
+										echo '<option value="' . $key . '" selected>' . $value . '</option>';
+									} else {
+										echo '<option value="' . $key . '">' . $value . '</option>';
+									}
+								}
+							?>
+						</select>
+					</div>
+					<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+						<div class="vmargin5 rpadding10">
+							<label class="vmargin5" for="avatar"><b><?php echo LANG_AVATAR; ?></b></label><br>
+							<div class="flex flex-valign-center flex-halign-justify width-100 vmargin10">
+							<?php
+								$picture = app\config\Paths::UMEMBERAVATAR . CONTEXT['MEMBER']->username . '.jpg';
+								if(file_exists($picture)) {
+									echo '<img alt="' . CONTEXT['MEMBER']->username . '" class="hmarginright10 thumbnail" src="' . app\file\SecureImport::getImageBase64($picture) . '">';
+								}
+							?>
+							<input accept="image/jpeg" class="vmargin5 width-100" id="avatar" name="avatar" type="file"><br>
+							</div>
+						</div>
+					</div>
+					<input class="button button-red" name="game-submit" type="submit" value="<?php echo LANG_SAVE_CHANGES; ?>">
+				</form>
+			</div>
+		</section>
+	</main>
+</div>
+<!-- Footer -->
+<?php include_once 'inc/footerInc.html'; ?>
