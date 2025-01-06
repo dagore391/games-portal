@@ -1,0 +1,43 @@
+Requisitos
+----------------------------------------------------
+Extensiones de PHP activas:
+	-> extension=gd
+
+
+Web login
+----------------------------------------------------
+username: admin
+password: Admin-123
+
+
+Configurar email
+----------------------------------------------------
+Editar php.ini
+
+[mail function]
+; For Win32 only.
+; https://php.net/smtp
+SMTP=smtp.gmail.com
+; https://php.net/smtp-port
+smtp_port=465
+
+; For Win32 only.
+; https://php.net/sendmail-from
+;sendmail_from = me@example.com
+
+; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
+; https://php.net/sendmail-path
+sendmail_path =‪ "C:\xampp\sendmail\sendmail.exe -t"
+
+
+
+Editar sendmail.ini
+----------------------------------------------------
+smtp_server=smtp.gmail.com
+
+; smtp port (normally 25)
+
+smtp_port=465
+
+auth_username=youremail@domain
+auth_password=yourpassword
