@@ -5,9 +5,9 @@ Versión: 0.1.0
 DESCRIPCIÓN
 ------------------------------------------------------------------------------------------------
 GamesPortal es un sencillo gestor de contenidos desarrollado con PHP, HTML, CSS, JS y SQL que
-permite dar vida a una aplicación Web sobre videojuegos. Con esta herramienta redactar entradas
-(análisis, noticias, rumores, avances, guías y artículos), mantener fichas de videojuegos,
-gestionar un foro, mensajería privada y mucho más.
+permite dar vida a una aplicación Web sobre videojuegos. Con esta herramienta podrás redactar
+entradas (análisis, noticias, rumores, avances, guías y artículos), mantener fichas de juegos,
+gestionar un foro, utilizar mensajería privada y mucho más.
 
 
 CARACTERÍSTICAS DESTADAS
